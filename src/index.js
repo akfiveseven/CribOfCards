@@ -26,13 +26,14 @@ class MyGame extends Phaser.Scene
             loop: -1
         });
     }
+
 }
 
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
     scene: MyGame
 };
 
