@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+let width = 0;
+let height = 0;
 export default class MainMenu extends Phaser.Scene
 {
     constructor() 
@@ -11,23 +13,58 @@ export default class MainMenu extends Phaser.Scene
 
     }
 
+
+    // My ultrawide monitor: 3440x1329
+    // My normal monitor: 1920x969
+
+
     create()
     {
-        let { width, height } = this.sys.game.canvas;
-        let centerWidth = width / 2;
-        let centerHeight = height / 2;
-        let scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
-        let logoImage = this.add.image(centerWidth, centerHeight - 300, 'logo').setScale(scaleRatio, scaleRatio);
-        //let playText = this.add.text(centerWidth, centerHeight + 400, "Play", { fill: '#234543' }).setScale(scaleRatio, scaleRatio);
-        var text = this.add.text(centerWidth, centerHeight + 300, 'Play', { fontSize: '150px', fill: '#ded9cc' });
+        width = window.innerWidth;
+        height = window.innerHeight; 
+        this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
+        this.logoImage = this.add.image(width / 2, height / 2 , 'logo').setScale(this.scaleRatio, this.scaleRatio).setInteractive().on('pointerdown', () => this.nextThing());
+        // var text = this.add.text(width / 2, height / 2, 'Play', { fontSize: '150px', fill: '#ded9cc' }).setInteractive().on('pointerdown', () => this.nextThing());
+
+        this.dprText = this.add.text(30, 20, "DPR: " + window.devicePixelRatio).setFontSize(30);  
+        this.widthText = this.add.text(30, 45, "Width: " + window.innerWidth).setFontSize(30);
+        this.heightText = this.add.text(30, 70, "Height: " + window.innerHeight).setFontSize(30);
+
+
+
+
         //var text = this.add.text(100, 100, 'Hello, world!', { fontSize: '32px', fill: '#fff' });
-        window.addEventListener('resize', () => {
-            location.reload();
-        }); 
+        // window.addEventListener('resize', () => {
+        //     location.reload();
+        // }); 
+    }
+
+    nextThing() {
+        console.log("DPR: " + window.devicePixelRatio);
+        console.log("Inner Width: " + window.innerWidth);
+        console.log("Inner Height: " + window.innerHeight);
+        console.log("\n");
+        this.dprText.setText("DPR: " + window.devicePixelRatio);
+        this.widthText.setText("Width: " + window.innerWidth);
+        this.heightText.setText("Height: " + window.innerHeight);
     }
 
     update()
     {
+
+        width = window.innerWidth;
+        height = window.innerHeight;
+        this.logoImage.setPosition(width / 2, height / 2).setScale(this.scaleRatio, this.scaleRatio);
+
+        // let x = width;
+        // width = window.innerWidth;
+        // if (x != width) {
+        //    this.logoImage.setVisible(false).setActive(false);
+        //    this.logoImage = this.add.image(window.innerWidth / 2, window.innerHeight / 2 - 300, 'logo').setScale(this.scaleRatio, this.scaleRatio);
+        // }
+
+        // width = this.sys.game.canvas.width;
+        // console.log(width);
         // window.addEventListener('resize', () => {
         //     console.log("resize");
         //     logoImage = logoImage;
