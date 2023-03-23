@@ -14,8 +14,9 @@ export default class MainMenu extends Phaser.Scene
     }
 
 
-    // My ultrawide monitor: 3440x1329
-    // My normal monitor: 1920x969
+    // My ultrawide monitor: 3440x1329 DPR: 1
+    // My normal monitor: 1920x969 DPR: 1
+    // My macbook: 1440x774 (safari) 1440x747 (chrome) DPR: 2
 
 
     create()
@@ -29,7 +30,9 @@ export default class MainMenu extends Phaser.Scene
         this.dprText = this.add.text(30, 20, "DPR: " + window.devicePixelRatio).setFontSize(30);  
         this.widthText = this.add.text(30, 45, "Width: " + window.innerWidth).setFontSize(30);
         this.heightText = this.add.text(30, 70, "Height: " + window.innerHeight).setFontSize(30);
-
+        // this.canvasWidthText = this.add.text(30, 95, "Canvas Width: " + this.sys.game.canvas.width).setFontSize(30);
+        // this.canvasHeightText = this.add.text(30, 120, "Canvas Height: " + this.sys.game.canvas.height).setFontSize(30);
+        // document.documentElement.requestFullscreen();
 
 
 
@@ -47,6 +50,8 @@ export default class MainMenu extends Phaser.Scene
         this.dprText.setText("DPR: " + window.devicePixelRatio);
         this.widthText.setText("Width: " + window.innerWidth);
         this.heightText.setText("Height: " + window.innerHeight);
+        // this.canvasWidthText.setText("Canvas Width: " + this.sys.game.canvas.width);
+        // this.canvasHeightText.setText("Canvas Height: " + this.sys.game.canvas.height);
     }
 
     update()
