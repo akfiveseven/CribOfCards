@@ -19,6 +19,9 @@ export default class MainMenu extends Phaser.Scene
     // My iPhone 13: 980x1666 DPR: 3
 
 
+    // IPhone 13: 980x1666/1681 (vertical) 980x401/436 (horizontal)
+    // [] just need to do horizontal
+
     create()
     {
         width = window.innerWidth;
