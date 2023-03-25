@@ -12,6 +12,7 @@ export default class Preloader extends Phaser.Scene
     preload()
     {
         this.load.image('logo', logoImg);
+        this.load.audio('titleMusic', 'src/assets/music/pog_looped.mp3');
     }
 
     create() {
