@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
-let width = 0;
-let height = 0;
+var width = 0;
+var height = 0;
 var backMusic;
+
+var battlesComplete;
+
 export default class MainMenu extends Phaser.Scene
 {
     constructor() 
@@ -10,7 +13,7 @@ export default class MainMenu extends Phaser.Scene
     }
     preload()
     {
-
+        battlesComplete = 0;
     }
 
 
@@ -36,11 +39,10 @@ export default class MainMenu extends Phaser.Scene
         height = window.innerHeight; 
         this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
         this.titleImg = this.add.image(width / 2, height / 2 - 200, 'logo').setScale(this.scaleRatio, this.scaleRatio);
-        //this.playText = this.add.text(width / 2 - 95, height / 2 + 100, "Play", {fontSize: '80px', fill: '#ded9cc'}).setScale(this.scaleRatio, this.scaleRatio).setInteractive().on('pointerdown', () => this.nextThing());
-        //this.playText.setFontFamily("novem");
+        //this.playText = this.add.text(width / 2 - 95, height / 2 + 100, "Play", { fontFamily: 'MyCustomFont', fontSize: '80px', fill: '#ded9cc' }).setScale(this.scaleRatio, this.scaleRatio).setInteractive().on('pointerdown', () => this.nextThing());
         this.playImg = this.add.image(width / 2 - 20, height /  2 + 100, 'play').setScale(this.scaleRatio, this.scaleRatio).setInteractive().on('pointerdown', () => this.nextThing());
         //this.bider = this.add.image(width / 2, height / 2, 'bider').setScale(this.scaleRatio, this.scaleRatio);
-        this.versionText = this.add.text(30, height - 100, "v.0.1.10", {fontSize: '80px', fill: '#ded9cc'}).setScale(this.scaleRatio, this.scaleRatio);
+        this.versionText = this.add.text(30, height - 100, "v.0.1.10", { fontFamily: 'MyCustomFont', fontSize: '80px', fill: '#ded9cc'}).setScale(this.scaleRatio, this.scaleRatio);
 
         this.dprText = this.add.text(30, 20, "DPR: " + window.devicePixelRatio, { fill: "#ded9cc" }).setFontSize(26);  
         this.widthText = this.add.text(30, 45, "Width: " + window.innerWidth, { fill: "#ded9cc" }).setFontSize(26);
@@ -50,7 +52,7 @@ export default class MainMenu extends Phaser.Scene
 
     nextThing() {
         backMusic.setVolume(0);
-        // this.scene.start('');
+        this.scene.start('fight');
     }
 
 

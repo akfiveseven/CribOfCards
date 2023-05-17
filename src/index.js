@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Preloader from "./util/preloader.js";
 import MainMenu from "./scenes/mainmenu.js";
+import Fight from "./scenes/fight.js";
 
 const config = {
     type: Phaser.AUTO,
@@ -15,7 +16,7 @@ const config = {
         height: '100%'
     },
     pixelArt: true,
-    scene: [Preloader, MainMenu]
+    scene: [Preloader, MainMenu, Fight]
 };
 
 const game = new Phaser.Game(config);
