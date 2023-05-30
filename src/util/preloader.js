@@ -6,6 +6,8 @@ import swordImg from '../assets/sword.png'
 import heartImg from '../assets/heart.png'
 import chestImg from '../assets/chest.png'
 import slimeImg from '../assets/basic_slime.png';
+import wizardImg from '../assets/wizz_64x64.png';
+import hpSprite from '../assets/hp_spritesheet.png';
 
 
 export default class Preloader extends Phaser.Scene
@@ -24,6 +26,8 @@ export default class Preloader extends Phaser.Scene
         this.load.image('heart', heartImg);
         this.load.image('chest', chestImg);
         this.load.image('slime', slimeImg);
+        this.load.image('wizzsheet', wizardImg);
+        this.load.spritesheet('hpspritesheet', hpSprite, { frameWidth: 100, frameHeight: 35 });
         this.load.audio('titleMusic', 'src/assets/music/pog_looped.mp3');
     }
 
