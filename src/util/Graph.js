@@ -7,7 +7,10 @@ export default class Graph {
   addEdge(source, destination) {
     const sourceNode = this.addVertex(source);
     const destinationNode = this.addVertex(destination);
+    
+    sourceNode.addAdjacent(destinationNode);
 
+      
   }
 }
 
