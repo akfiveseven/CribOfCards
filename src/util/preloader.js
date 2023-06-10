@@ -19,16 +19,25 @@ export default class Preloader extends Phaser.Scene
 
     preload()
     {
+
+
+        // MUSIC ASSETS
+        this.load.audio('titleMusic', 'src/assets/music/pog_looped.mp3');
+
+        // MAIN MENU ASSETS
         this.load.image('logo', logoImg);
         this.load.image('play', playImg);
-        this.load.image('bider', biderImg);
+
+        // LEVEL SELECTOR ASSETS
         this.load.image('sword', swordImg);
         this.load.image('heart', heartImg);
         this.load.image('chest', chestImg);
+
+        // FIGHT ASSETS
+        this.load.image('bider', biderImg);
         this.load.image('slime', slimeImg);
         this.load.image('wizzsheet', wizardImg);
         this.load.spritesheet('hpspritesheet', hpSprite, { frameWidth: 100, frameHeight: 35 });
-        this.load.audio('titleMusic', 'src/assets/music/pog_looped.mp3');
     }
 
     create() {

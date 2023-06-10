@@ -38,6 +38,7 @@ function level(name, sprite) {
     this.spriteID = sprite;
     this.image;
 }
+
 export default class Fight extends Phaser.Scene {
     constructor() {
         super({ key: 'fight' });
@@ -65,19 +66,25 @@ export default class Fight extends Phaser.Scene {
         this.playerSprite = this.add.image();
         this.pHPSprite = this.add.sprite();
 
+        this.enemySprite = this.add.image();
+        this.eHPSprite = this.add.sprite();
+
+
         if (player.getPlayer().stage == 1) {
             cVar.initPlayerCards();
             cVar.setCaption();
             cVar.initSlimeCards();
             // name, currHP, maxHP, currMana, maxMana, attackPower, magicPower, attackDefense, magicDefense, critChance, sprite, gold, stage
 
-            let randomEnemyID = Math.floor(Math.random() * 2) + 1;
-            if (randomEnemyID == 1) {
-                enemy = new entity("Sticky Slime", 1, 1, 0, 0, 10, 10, 5, 0, 0, 'slime', 0, 0, 0);
-            }
-            else if (randomEnemyID == 2) {
-                enemy = enemy = new entity("Bider", 1, 1, 0, 0, 10, 10, 5, 0, 0, 'bider', 0, 0, 0);
-            }
+            // let randomEnemyID = Math.floor(Math.random() * 2) + 1;
+            // if (randomEnemyID == 1) {
+            //     enemy = new entity("Sticky Slime", 1, 1, 0, 0, 10, 10, 5, 0, 0, 'slime', 0, 0, 0);
+            // }
+            // else if (randomEnemyID == 2) {
+            //     enemy = new entity("Bider", 1, 1, 0, 0, 10, 10, 5, 0, 0, 'bider', 0, 0, 0);
+            // }
+
+            enemy = new entity("Bider", 100, 100, 0, 0, 10, 10, 5, 0, 0, 'bider', 0, 0, 0);
 
         }
     }
@@ -95,17 +102,19 @@ export default class Fight extends Phaser.Scene {
 
     startLevel1() {
         this.level.image.setActive(false).setVisible(false);
-        this.playerSprite = this.add.image(width/15, height*8/10, 'wizzsheet').setScale(3); // player hp sprite
-        this.pHPSprite = this.add.sprite(width/16, height/2, 'hpspritesheet', player.getPlayer().hp).setScale(1.8); // player hp sprite
-		// this.pHPSprite = this.add.sprite(150, 640, 'hpspritesheet', player.getPlayer().hp).setScale(2.8); // player hp sprite
+        this.playerSprite = this.add.image(width/15, height*8/10, 'wizzsheet').setScale(this.scaleRatio, this.scaleRatio); // player hp sprite
+        this.pHPSprite = this.add.sprite(width/16, height*3/5, 'hpspritesheet', player.getPlayer().hp).setScale(1.8); // player hp sprite
+        this.enemySprite = this.add.image(width*3/4, height*1/2, enemy.img).setScale(2.5);
+        this.eHPSprite = this.add.sprite(width*3/4, height*1/12, 'hpspritesheet', enemy.hp).setScale(2.5); // player hp sprite
     }
 
     update() {
         scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
         width = window.innerWidth;
         height = window.innerHeight;
-        this.pHPSprite.setFrame(Math.round(((player.getPlayer().hp / player.getPlayer().maxHP) * 10)))
-        this.responsiveUpdate();
+        this.pHPSprite.setFrame(Math.round(((player.getPlayer().hp / player.getPlayer().maxHP) * 10)));
+        this.eHPSprite.setFrame(Math.round(((enemy.hp / enemy.maxHP) * 10)))
+        // this.responsiveUpdate();
     }
 
     displayGraph(levelObj) {
@@ -197,8 +206,19 @@ export default class Fight extends Phaser.Scene {
         scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
         width = window.innerWidth;
         height = window.innerHeight;
-        this.level.image.setPosition(width/2, height/2);
+
+        // LEVEL SELECT
+        this.level.image.setPosition(width/15, height*8/10);
+
+
+        // FIGHT
         this.playerSprite.setPosition(width/15, height*8/10);
+
+
+
+
+
+
         // this.stageOne.setPosition(width / 3, height / 2);
         // this.stageTwo.setPosition(width / 2, height / 2);
         // this.stageThree.setPosition((2 * width) / 3, height / 2);
