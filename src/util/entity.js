@@ -1,5 +1,11 @@
 
 
+// name, currHP, maxHP, currMana, maxMana, attackPower, magicPower, attackDefense, magicDefense, critChance, sprite, gold, stage
+
+
+//const slime = new entity("Sticky Slime", 10, 10, 0, 0, 10, 10, 25, 0, 0, 'slime', 0, 0);
+
+//const cat = new entity("Black Cat", 10, 10, 0, 0, 'cat', 0, 0);
 
 export default class entity {
 
@@ -17,6 +23,7 @@ export default class entity {
     // gold
     // stage
 
+  // name, currHP, maxHP, currMana, maxMana, attackPower, magicPower, attackDefense, magicDefense, critChance, spriteString, gold, stage, critID
 
     constructor(name, currHP, maxHP, currMana, maxMana, attackPower, magicPower, attackDefense, magicDefense, critChance, spriteString, gold, stage, critID) {
         this.name = name;
@@ -35,40 +42,25 @@ export default class entity {
         this.critID = critID;
     }
 
-    getPlayer() {
-        return playerObject;
-    }
 
-    getEnemy(specification) {
-        if (specification == 0) { // slime
-            return slime;
-        }
-        else if (specification == 1) { // cat
-            return cat;
-        }
-        else if (specification == 2) { // octo
+    // getEnemy(specification) {
+    //     if (specification == 0) { // slime
+    //         return slime;
+    //     }
+    //     else if (specification == 1) { // cat
+    //         return cat;
+    //     }
+    //     else if (specification == 2) { // octo
 
-        }
-        else if (specification == 3) { // bider
+    //     }
+    //     else if (specification == 3) { // bider
 
-        }
-    }
+    //     }
+    // }
 
 
 
 }
-
-// name, currHP, maxHP, currMana, maxMana, attackPower, magicPower, attackDefense, magicDefense, critChance, sprite, gold, stage
-
-const playerObject = new entity("PLAYER", 100, 100, 150, 150, 5, 35, 3, 5, 0.25, 'character', 0, 1, 1);
-
-//const slime = new entity("Sticky Slime", 10, 10, 0, 0, 10, 10, 25, 0, 0, 'slime', 0, 0);
-
-//const cat = new entity("Black Cat", 10, 10, 0, 0, 'cat', 0, 0);
-
-
-
-
 
 
 

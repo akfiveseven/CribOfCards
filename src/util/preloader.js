@@ -36,7 +36,7 @@ export default class Preloader extends Phaser.Scene
         // FIGHT ASSETS
         this.load.image('bider', biderImg);
         this.load.image('slime', slimeImg);
-        this.load.image('wizzsheet', wizardImg);
+        this.load.image('character', wizardImg);
         this.load.spritesheet('hpspritesheet', hpSprite, { frameWidth: 100, frameHeight: 35 });
     }
 

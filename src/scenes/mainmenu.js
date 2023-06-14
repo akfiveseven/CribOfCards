@@ -52,13 +52,13 @@ export default class MainMenu extends Phaser.Scene
 
     nextThing() {
         backMusic.setVolume(0);
-        this.scene.start('fight');
+        this.scene.start('level');
     }
 
 
     update()
     {
-        this.responsiveUpdate();
+        //this.responsiveUpdate();
     }
 
 
