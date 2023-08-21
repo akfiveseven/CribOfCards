@@ -20,7 +20,13 @@ export default class Level extends Phaser.Scene {
     player = objs.getPlayer();
   }
 
+
   create () {
+
+
+
+
+
     if (player.stage == 1) {
       this.levelText = this.add.text(width*66/200, height*2/24, "Level 1", { fontFamily: 'MyCustomFont', fontSize: '128px', fill: '#ded9cc' });
       this.add.image(width/2, height/2, 'sword').setInteractive().on('pointerdown', () => this.nextThing());
@@ -32,8 +38,24 @@ export default class Level extends Phaser.Scene {
     }
   }
 
+  nextThing() {
+    let roll = this.getRandomNumberInRange(2);
+    if (roll == 1) {
+      // Fight
+    }
+    else if (roll == 2) {
+      // Shop, Heal, Free Cards
+    }
+  }
+
   update() {
 
+  }
+
+
+  // Returns a random number from 1 to range specified
+  getRandomNumberInRange(range) {
+    return Math.floor(Math.random() * range) + 1;
   }
 
 }

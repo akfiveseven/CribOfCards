@@ -1,5 +1,9 @@
 # AK's notes
 node v16.14.2
+
+command to install:
+nvm install 16.14.2
+
 # Phaser 3 Webpack Project Template
 
 A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/) that includes hot-reloading for development and production-ready builds.

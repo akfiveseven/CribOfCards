@@ -45,6 +45,7 @@ export default class MainMenu extends Phaser.Scene
         this.versionText = this.add.text(30, height - 100, "v.0.1.10", { fontFamily: 'MyCustomFont', fontSize: '80px', fill: '#ded9cc'});
 
         this.dprText = this.add.text(30, 20, "DPR: " + window.devicePixelRatio, { fill: "#ded9cc" }).setFontSize(26);  
+        //this.dprText = this.add.text(30, 20, "AAK" + window.devicePixelRatio, { fill: "#ded9cc" }).setFontSize()
         this.widthText = this.add.text(30, 45, "Width: " + window.innerWidth, { fill: "#ded9cc" }).setFontSize(26);
         this.heightText = this.add.text(30, 70, "Height: " + window.innerHeight, { fill: "#ded9cc" }).setFontSize(26);
 
