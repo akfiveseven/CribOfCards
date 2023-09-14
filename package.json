@@ -1,7 +1,7 @@
 {
   "name": "Crib of Cards",
-  "version": "0.1.10",
-  "description": "A web turned based strategy card game",
+  "version": "0.9.10",
+  "description": "A web turned based strategy card game, inspired by 'Slay the Spire'",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
@@ -24,6 +24,7 @@
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "file-loader": "^4.2.0",
+    "html-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "raw-loader": "^3.1.0",
     "terser-webpack-plugin": "^2.2.1",
@@ -33,6 +34,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "phaser": "^3.50.0"
+    "phaser": "^3.50.0",
+    "seedrandom": "^3.0.5"
   }
 }

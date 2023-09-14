@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import seedrandom from 'seedrandom';
+
 import Preloader from "./util/preloader.js";
 import MainMenu from "./scenes/mainmenu.js";
 import Fight from "./scenes/fight.js";
