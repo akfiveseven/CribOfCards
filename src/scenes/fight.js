@@ -13,6 +13,7 @@ var mainFontFamily;
 var seed, seedSize, seedIndex = 0;
 
 
+
 export default class Fight extends Phaser.Scene {
 
     constructor() {
@@ -39,23 +40,32 @@ export default class Fight extends Phaser.Scene {
 
     create() {
 
-      const element = this.add.dom(400, 600).createFromCache('seedSelect');
+      const inputField = this.add.dom(centerX, centerY, 'input', 'background-color: white;');
+      inputField.node.setAttribute('placeholder', 'Seed String');
 
-      element.setPerspective(800);
 
-      element.addListener('click');
+      const submitButton = this.add.dom(centerX, centerY-200, 'button', '', 'Submit');
 
-      element.on('click', function (event)
-      {
-        console.log("my name is jeff");
+      submitButton.node.setAttribute('type', 'submit');
+
+      
+      
+      submitButton.node.addEventListener('click', function () {
+        const inputValue = inputField.node.value;
+  
+        console.log("Input value:", inputValue);
       });
+      
+    
 
-      this.tweens.add({
-          targets: element,
-          y: 300,
-          duration: 3000,
-          ease: 'Power3'
-      }); 
+      
+
+      
+
+      
+
+
+
      
  
 

@@ -20,6 +20,9 @@ const config = {
         height: '100%'
     },
     pixelArt: true,
+    dom: {
+      createContainer: true
+    },
     scene: [Preloader, MainMenu, Level, Test, Fight]
 };
 

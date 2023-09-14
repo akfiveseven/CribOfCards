@@ -17,7 +17,6 @@ export default class Level extends Phaser.Scene {
 
 
   preload() {
-    this.load.html('seedSelect', '../util/seedform.html');
     width = window.innerWidth;
     height = window.innerHeight;
     centerX = width/2;
