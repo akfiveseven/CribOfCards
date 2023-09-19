@@ -1,7 +1,6 @@
 //fight.js
 import Phaser, { Scene } from "phaser";
 import seedrandom from 'seedrandom';
-import html from "../util/seedform.html";
 
 
 var width, height;
@@ -23,9 +22,8 @@ export default class Fight extends Phaser.Scene {
     }
 
     preload() {
-      this.initSeed();
+      //this.initSeed();
 
-      this.load.html('seedSelect', html);
 
 
       width = window.innerWidth;
