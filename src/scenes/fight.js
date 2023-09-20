@@ -48,6 +48,8 @@ export default class Fight extends Phaser.Scene {
 
       this.addClickableText(centerX, centerY, "<GET RANDOM>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.getRandomNumberFromSeed() );
       this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex }) );
+
+      this.addClickableText(centerX-50, centerY, "hello", mainFontFamily, '36px', mainFontColor);
       
  
       //==============================
