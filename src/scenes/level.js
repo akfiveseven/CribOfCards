@@ -20,7 +20,7 @@ export default class Level extends Phaser.Scene {
     height = window.innerHeight;
     centerX = width/2;
     centerY  = height/2;
-    player = objs.getPlayer();
+    //player = objs.getPlayer();
   }
 
   init(data) {

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import seedrandom from 'seedrandom';
+import objects from '../util/objects.js';
 
 var width = 0;
 var height = 0;
@@ -20,6 +21,8 @@ var playClicked;
 var seedObject;
 var versionString;
 
+var objs;
+
 export default class MainMenu extends Phaser.Scene
 {
     constructor() 
@@ -35,6 +38,9 @@ export default class MainMenu extends Phaser.Scene
         bgColor = '#2e2e2e';
         mainFontFamily = 'MyCustomFont';
         versionString = "v0.2.1a";
+
+        objs = new Objects();
+        console.log(objs.getPlayer().name);
 
         seed = Math.random();
         seedIndex = 0;
