@@ -18,6 +18,7 @@ var inputField;
 var playClicked;
 
 var seedObject;
+var versionString;
 
 export default class MainMenu extends Phaser.Scene
 {
@@ -33,6 +34,7 @@ export default class MainMenu extends Phaser.Scene
         mainFontColor = '#ded9cc';
         bgColor = '#2e2e2e';
         mainFontFamily = 'MyCustomFont';
+        versionString = "v0.2.1a";
 
         seed = Math.random();
         seedIndex = 0;
@@ -101,7 +103,7 @@ export default class MainMenu extends Phaser.Scene
 
         this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
         this.titleImg = this.add.image(centerX, height*(0.15), 'logo').setScale(this.scaleRatio, this.scaleRatio);
-        this.versionText = this.add.text(width*(0.90), height*(0.93), "v0.2a", { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
+        this.versionText = this.add.text(width*(0.90), height*(0.93), versionString, { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
 
 
     }

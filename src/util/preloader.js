@@ -1,13 +1,13 @@
 import Phaser from "phaser";
-import logoImg from '../assets/crib_of_cards_logo.png';
-import playImg from '../assets/play_button.png'
-import biderImg from '../assets/bider.png'
-import swordImg from '../assets/sword.png'
-import heartImg from '../assets/heart.png'
-import chestImg from '../assets/chest.png'
-import slimeImg from '../assets/basic_slime.png';
-import wizardImg from '../assets/wizz_64x64.png';
-import hpSprite from '../assets/hp_spritesheet.png';
+import logoImg from '../../assets/textures/crib_of_cards_logo.png';
+import playImg from '../../assets/textures/play_button.png'
+import biderImg from '../../assets/textures/bider.png'
+import swordImg from '../../assets/textures/sword.png'
+import heartImg from '../../assets/textures/heart.png'
+import chestImg from '../../assets/textures/chest.png'
+import slimeImg from '../../assets/textures/basic_slime.png';
+import wizardImg from '../../assets/textures/wizz_64x64.png';
+import hpSprite from '../../assets/textures/hp_spritesheet.png';
 
 
 export default class Preloader extends Phaser.Scene
@@ -22,7 +22,7 @@ export default class Preloader extends Phaser.Scene
 
 
         // MUSIC ASSETS
-        this.load.audio('titleMusic', 'src/assets/music/pog_looped.mp3');
+        this.load.audio('titleMusic', 'assets/music/pog_looped.mp3');
 
         // MAIN MENU ASSETS
         this.load.image('logo', logoImg);
