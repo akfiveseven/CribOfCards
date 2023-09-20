@@ -1,19 +1,46 @@
 import Phaser from 'phaser';
+import seedrandom from 'seedrandom';
+
 var width = 0;
 var height = 0;
 var backMusic;
+var centerX, centerY;
 
 var battlesComplete;
+
+var seed, seedSize, seedIndex;
+
+var mainFontColor, bgColor;
+var mainFontFamily;
+
+var inputField;
+
+var playClicked;
+
+var seedObject;
 
 export default class MainMenu extends Phaser.Scene
 {
     constructor() 
     {
+        playClicked = false;
         super ({key: 'mainmenu'});
-    }
-    preload()
-    {
+        width = window.innerWidth;
+        height = window.innerHeight; 
         battlesComplete = 0;
+        centerX = width/2;
+        centerY  = height/2;
+        mainFontColor = '#ded9cc';
+        bgColor = '#2e2e2e';
+        mainFontFamily = 'MyCustomFont';
+
+        seed = Math.random();
+        seedIndex = 0;
+
+        console.log("Initial window width: " + width);        
+        console.log("Initial window height: " + height);        
+        console.log("Initial device pixel ratio (dpr): " + window.devicePixelRatio);        
+        //console.log("Initial dpr scale : " + (window.devicePixelRatio / window.devicePixelRatio));
     }
 
 
@@ -33,21 +60,49 @@ export default class MainMenu extends Phaser.Scene
         backMusic.setVolume(1);
         backMusic.play();
 
+        
+        inputField = this.add.dom(width*(0.055), height*(0.93), 'input', 'background-color: white;');
+        inputField.setOrigin(0.5, 0.5);
+        inputField.node.setAttribute('placeholder', 'random seed');
+
+        inputField.node.style.color = "#ded9cc";
+        inputField.node.style.textDecoration = "none";
+        inputField.node.style.fontSize = "3em";
+        inputField.node.style.fontFamily = mainFontFamily;
+        inputField.node.style.background = "none";
+        inputField.node.style.border = "none";
+        inputField.node.style.outline = "none";
+        inputField.node.style.width = "75%";
+        
+
+        var submitButton = this.add.dom(centerX*(0.925), centerY*(1.3), 'button', '', 'play');
+
+        submitButton.node.setAttribute('type', 'submit');
+
+        
+        submitButton.node.style.color = "#ded9cc";
+        submitButton.node.style.textDecoration = "none";
+        submitButton.node.style.fontSize = "3em";
+        submitButton.node.style.fontFamily = mainFontFamily;
+        submitButton.node.style.background = "none";
+        submitButton.node.style.border = "none";
+        
+        
+        //submitButton.node.addEventListener('click', function () {
+          //const inputValue = inputField.node.value;
+          //seed = inputValue;          
+        //});
+
+        //submitButton.node.addEventListener('click', function () { const inputValue = inputField.node.value; seed = inputValue; } );
+      
+      
+        submitButton.node.addEventListener('click', this.initSeed );
 
 
-        width = window.innerWidth;
-        height = window.innerHeight; 
         this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
-        this.titleImg = this.add.image(width / 2, height / 2 - 200, 'logo').setScale(this.scaleRatio, this.scaleRatio);
-        //this.playText = this.add.text(width / 2 - 95, height / 2 + 100, "Play", { fontFamily: 'MyCustomFont', fontSize: '80px', fill: '#ded9cc' }).setScale(this.scaleRatio, this.scaleRatio).setInteractive().on('pointerdown', () => this.nextThing());
-        this.playImg = this.add.image(width / 2 - 20, height /  2 + 100, 'play').setScale(this.scaleRatio, this.scaleRatio).setInteractive().on('pointerdown', () => this.nextThing());
-        //this.bider = this.add.image(width / 2, height / 2, 'bider').setScale(this.scaleRatio, this.scaleRatio);
-        this.versionText = this.add.text(30, height - 100, "v.0.1.10", { fontFamily: 'MyCustomFont', fontSize: '80px', fill: '#ded9cc'});
+        this.titleImg = this.add.image(centerX, height*(0.15), 'logo').setScale(this.scaleRatio, this.scaleRatio);
+        this.versionText = this.add.text(width*(0.90), height*(0.93), "v0.1.10a", { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
 
-        this.dprText = this.add.text(30, 20, "DPR: " + window.devicePixelRatio, { fill: "#ded9cc" }).setFontSize(26);  
-        //this.dprText = this.add.text(30, 20, "AAK" + window.devicePixelRatio, { fill: "#ded9cc" }).setFontSize()
-        this.widthText = this.add.text(30, 45, "Width: " + window.innerWidth, { fill: "#ded9cc" }).setFontSize(26);
-        this.heightText = this.add.text(30, 70, "Height: " + window.innerHeight, { fill: "#ded9cc" }).setFontSize(26);
 
     }
 
@@ -59,27 +114,73 @@ export default class MainMenu extends Phaser.Scene
 
     update()
     {
-        //this.responsiveUpdate();
+        if (playClicked == true) {
+          this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex });  
+        }
     }
 
 
 
-    responsiveUpdate() {
 
-        this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
-        width = window.innerWidth;
-        height = window.innerHeight;
+    initSeed() {
 
 
-        // DEBUG TEXTS
-        this.dprText.setText("DPR: " + window.devicePixelRatio);
-        this.widthText.setText("Width: " + window.innerWidth);
-        this.heightText.setText("Height: " + window.innerHeight);
 
-        this.titleImg.setPosition(width / 2, height / 2 - 200).setScale(this.scaleRatio, this.scaleRatio);
-        this.playImg.setPosition(width / 2 - 20, height / 2 + 100).setScale(this.scaleRatio, this.scaleRatio);
-        //this.bider.setPosition(width / 2, height / 2).setScale(this.scaleRatio, this.scaleRatio);
-        this.versionText.setPosition(30, height - 100).setScale(this.scaleRatio, this.scaleRatio);
+
+      let inputSeed = inputField.node.value;
+      if (inputSeed != "") {
+        seed = inputSeed; 
+      }
+
+      const generator = seedrandom(seed);
+
+      const randomNumber = generator();
+
+      seed = randomNumber;
+
+      const nS = seed.toString()
+      const parts = nS.split('.');
+      const iD = parts[0].length;
+
+      let totalDigits = iD;
+
+      if (parts.length === 2) {
+        totalDigits += parts[1].length;
+      }
+
+      totalDigits = totalDigits - 1;
+
+      seedSize = totalDigits;
+
+      console.log("seed created: " + seed);      
+      console.log(seedSize);
+      console.log(seedIndex);
+
+      //seedObject = {
+        
+      //};
+
+      playClicked = true;
     }
 
+    sizeOfSeed(number) {
+      // Convert the number to a string
+      const numberString = number.toString();
+
+      // Split the string into integer and fractional parts (if applicable)
+      const parts = numberString.split('.');
+
+      // Count the digits in the integer part
+      const integerDigits = parts[0].length;
+
+      // If there is a fractional part, add its length to the count
+      let totalDigits = integerDigits;
+      if (parts.length === 2) {
+        totalDigits += parts[1].length;
+      }
+
+      totalDigits = totalDigits - 1;
+
+      return totalDigits;
+    }
 }

@@ -8,9 +8,11 @@ var centerX, centerY;
 var mainFontColor, bgColor;
 var mainFontFamily;
 
-
 var seed, seedSize, seedIndex = 0;
 
+var entityVar;
+
+var seed;
 
 
 export default class Fight extends Phaser.Scene {
@@ -19,60 +21,49 @@ export default class Fight extends Phaser.Scene {
 
         super({ key: 'fight' });
 
+        width = window.innerWidth;
+        height = window.innerHeight;
+        centerX = width/2;
+        centerY  = height/2;
+        mainFontColor = '#ded9cc';
+        bgColor = '#2e2e2e';
+        mainFontFamily = 'MyCustomFont';
+        //this.initSeed();
     }
 
-    preload() {
-      //this.initSeed();
-
-
-
-      width = window.innerWidth;
-      height = window.innerHeight;
-      centerX = width/2;
-      centerY  = height/2;
-      mainFontColor = '#ded9cc';
-      bgColor = '#2e2e2e';
-      mainFontFamily = 'MyCustomFont';
-
+    init(data) {
+        //entityVar = data.playerEn;
+        seed = data.seedOut;
+        seedSize = data.seedSizeOut;
+        seedIndex = data.seedIndexOut;
     }
+
+
 
     create() {
+      console.log("fight seed passed: " + seed);
+      console.log(seedSize);
+      console.log(seedIndex);
 
-      const inputField = this.add.dom(centerX, centerY, 'input', 'background-color: white;');
-      inputField.node.setAttribute('placeholder', 'Seed String');
 
-
-      const submitButton = this.add.dom(centerX, centerY-200, 'button', '', 'Submit');
-
-      submitButton.node.setAttribute('type', 'submit');
-
+      this.addClickableText(centerX, centerY, "<GET RANDOM>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.getRandomNumberFromSeed() );
+      this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex }) );
       
-      
-      submitButton.node.addEventListener('click', function () {
-        const inputValue = inputField.node.value;
-  
-        console.log("Input value:", inputValue);
-      });
-      
-    
-
-      
-
-      
-
-      
-
-
-
-     
  
-
+      //==============================
       //this.someText = this.addClickableText(centerX, centerY, "Get random num from seed (output in console)", mainFontFamily, '16px', mainFontColor, this.getRandomNumberFromSeed ).on('pointerdown', () => this.getRandomNumberFromSeed() );
       
     }
+    ss() {
+      console.log("SDFJH");
+    }
 
+    update() {
 
-    addClickableText(posX, posY, text, family, size, color) { // ONLY WORKS IF clickFunc has no parameters
+    }
+
+    //================================================= PHASER TEXT & IMAGE OBJECTS =================================================== 
+    addClickableText(posX, posY, text, family, size, color, func) { // ONLY WORKS IF clickFunc has no parameters
 
 
       let result = this.add.text(posX, posY, text, { fontFamily: family, fontSize: size, fill: color })
@@ -83,7 +74,27 @@ export default class Fight extends Phaser.Scene {
 
     }
 
+    toggleDisplayText(textObj, selection) {
+      if (selection == true) {
+        textObj.setActive(true).setVisible(true);
+      }
+      else {
+        textObj.setActive(false).setVisible(false);
+      } 
+    }
+
+    //================================================= SEED FUNCTIONS =================================================== 
+
+    initSeed() {
+      seed = this.getSeed('blah blah blah');
+      seedSize = this.sizeOfSeed(seed);
+      console.log("initial seed: " + seed);
+    }
+
     getRandomNumberFromSeed() {
+      console.log("seed pulling: " + seed);
+      console.log("seed size: " + seedSize);
+      console.log("seed index: " + seedIndex);
       if (seedIndex < seedSize) {
         let num1 = this.getNthDigit(seed, seedIndex);
         seedIndex = seedIndex + 1;
@@ -101,17 +112,6 @@ export default class Fight extends Phaser.Scene {
         return num2;
       }
     }
-    
-    update() {
-
-    }
-
-    initSeed() {
-      seed = this.getSeed('blah blah blah');
-      seedSize = this.sizeOfSeed(seed);
-      console.log("initial seed: " + seed);
-    }
-
 
     getNthDigit(number, n) {
       // Ensure n is a non-negative integer
@@ -129,7 +129,6 @@ export default class Fight extends Phaser.Scene {
 
       return nthDigit;
     }
-
 
     getSeed(inputString) {
 
@@ -184,30 +183,13 @@ export default class Fight extends Phaser.Scene {
       return totalDigits;
     }
 
-    initRandomGenerator(seed) {
-      return new Math.seedrandom(seed);
-    }
 
-    getRandomNumber(generator) {
-      return generator();
-    }
-
-
-
-
-    displayText(textObj, selection) {
-      if (selection == true) {
-        textObj.setActive(true).setVisible(true);
-      }
-      else {
-        textObj.setActive(false).setVisible(false);
-      } 
-    }
-    
+//=================================================  ===================================================    
 
     doNothing() {
       // This function is used as a placeholder function
     }
+
 
 
 
