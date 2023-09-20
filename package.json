@@ -1,6 +1,6 @@
 {
   "name": "Crib of Cards",
-  "version": "0.9.10",
+  "version": "v0.2a",
   "description": "A web turned based strategy card game, inspired by 'Slay the Spire'",
   "main": "src/index.js",
   "scripts": {

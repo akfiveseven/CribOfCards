@@ -1,5 +1,5 @@
 # Crib of Cards by Ammar Khan and friends
-Version 0.9.11 ALPHA
+Version 0.2 ALPHA
 
 # AK's notes
 node v16.14.2

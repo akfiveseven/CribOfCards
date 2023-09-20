@@ -101,7 +101,7 @@ export default class MainMenu extends Phaser.Scene
 
         this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
         this.titleImg = this.add.image(centerX, height*(0.15), 'logo').setScale(this.scaleRatio, this.scaleRatio);
-        this.versionText = this.add.text(width*(0.90), height*(0.93), "v0.1.10a", { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
+        this.versionText = this.add.text(width*(0.90), height*(0.93), "v0.2a", { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
 
 
     }
