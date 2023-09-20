@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import seedrandom from 'seedrandom';
-import objects from '../util/objects.js';
+import Objects from '../util/objects.js';
 
 var width = 0;
 var height = 0;
@@ -40,7 +40,6 @@ export default class MainMenu extends Phaser.Scene
         versionString = "v0.2.1a";
 
         objs = new Objects();
-        console.log(objs.getPlayer().name);
 
         seed = Math.random();
         seedIndex = 0;
@@ -123,7 +122,7 @@ export default class MainMenu extends Phaser.Scene
     update()
     {
         if (playClicked == true) {
-          this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex });  
+          this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs});  
         }
     }
 

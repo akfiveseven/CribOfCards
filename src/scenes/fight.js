@@ -14,6 +14,8 @@ var entityVar;
 
 var seed;
 
+var objs;
+
 
 export default class Fight extends Phaser.Scene {
 
@@ -36,6 +38,7 @@ export default class Fight extends Phaser.Scene {
         seed = data.seedOut;
         seedSize = data.seedSizeOut;
         seedIndex = data.seedIndexOut;
+        objs = data.objsOut;
     }
 
 
@@ -47,9 +50,8 @@ export default class Fight extends Phaser.Scene {
 
 
       this.addClickableText(centerX, centerY, "<GET RANDOM>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.getRandomNumberFromSeed() );
-      this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex }) );
+      this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs }) );
 
-      this.addClickableText(centerX-50, centerY, "hello", mainFontFamily, '36px', mainFontColor);
       
  
       //==============================

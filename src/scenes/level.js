@@ -13,6 +13,8 @@ var centerX, centerY;
 
 var seed, seedSize, seedIndex;
 
+var objs;
+
 export default class Level extends Phaser.Scene {
   constructor() {
     super({ key: 'level' });
@@ -27,6 +29,7 @@ export default class Level extends Phaser.Scene {
       seed = data.seedPassed;
       seedSize = data.seedSizePassed;
       seedIndex = data.seedIndexPassed;
+      objs = data.objsPassed;
   }
 
   create () {
@@ -63,6 +66,14 @@ export default class Level extends Phaser.Scene {
 
 
 
+
+  }
+
+  startLevel() {
+
+    this.levelText.setActive(false).setVisible(false); 
+
+    this.scene.start('fight', { seedOut: seed, seedSizeOut: seedSize, seedIndexOut: seedIndex, objsOut: objs });
 
   }
 
@@ -165,13 +176,6 @@ export default class Level extends Phaser.Scene {
     input.setActive(false).setVisible(false);
   }
 
-  startLevel() {
-    this.levelText.setActive(false).setVisible(false); 
-
-    this.scene.start('fight', { seedOut: seed, seedSizeOut: seedSize, seedIndexOut: seedIndex });
-
-
-  }
 
   nextThing() {
 

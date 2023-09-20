@@ -5,7 +5,7 @@ import Preloader from "./util/preloader.js";
 import MainMenu from "./scenes/mainmenu.js";
 import Fight from "./scenes/fight.js";
 import Level from "./scenes/level.js";
-import Test from "./scenes/test.js";
+//import Test from "./scenes/test.js";
 
 const config = {
     type: Phaser.AUTO,
@@ -23,7 +23,7 @@ const config = {
     dom: {
       createContainer: true
     },
-    scene: [Preloader, MainMenu, Level, Test, Fight]
+    scene: [Preloader, MainMenu, Level, Fight]
 };
 
 const game = new Phaser.Game(config);
