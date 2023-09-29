@@ -51,6 +51,7 @@ export default class Fight extends Phaser.Scene {
       console.log(seedIndex);
 
       let statStrings = ["player health - current hp / max hp", "player mana - current mana / max mana", "H3", "H4", "H5", "H6", "H7", "H8"];
+      let otherStrings = ['heartIcon', 'manaIcon', 'apIcon', 'adIcon', 'mpIcon', 'mdIcon', 'critIcon', 'critEffect'];
       let textObjs = [];
 
       for (let i = 0; i < 8; i++) {
@@ -67,26 +68,42 @@ export default class Fight extends Phaser.Scene {
       this.addImage(width*(0.065), height*(0.90), 'character', 1.5);
       this.addImage(width*(0.035), height*(0.05), 'deckIcon', 1);
 
-      this.addImage(width*(0.02), height*(0.55), 'heartIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
-      this.addImage(width*(0.02), height*(0.585), 'manaIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[1], true)).on('pointerout', () => this.toggleDisplayText(textObjs[1], false));
-      this.addImage(width*(0.02), height*(0.62), 'apIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[2], true)).on('pointerout', () => this.toggleDisplayText(textObjs[2], false));
-      this.addImage(width*(0.02), height*(0.655), 'adIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[3], true)).on('pointerout', () => this.toggleDisplayText(textObjs[3], false));
-      this.addImage(width*(0.02), height*(0.69), 'mpIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[4], true)).on('pointerout', () => this.toggleDisplayText(textObjs[4], false));
-      this.addImage(width*(0.02), height*(0.725), 'mdIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[5], true)).on('pointerout', () => this.toggleDisplayText(textObjs[5], false));
-      this.addImage(width*(0.02), height*(0.76), 'critIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[6], true)).on('pointerout', () => this.toggleDisplayText(textObjs[6], false));
-      this.addImage(width*(0.02), height*(0.795), 'critEffect', 1).on('pointerover', () => this.toggleDisplayText(textObjs[7], true)).on('pointerout', () => this.toggleDisplayText(textObjs[7], false));
+      let playerHealth = objs.getPlayer().hp + "/" + objs.getPlayer().maxHP;
+      let playerMana = objs.getPlayer().mana + "/" + objs.getPlayer().maxMana;
+
+      let baseY = 0.35; // add 0.035
+      let baseY2 = 0.34; // add 0.035
+
+      let someObj = [];
+      someObj.push(playerHealth, playerMana, objs.getPlayer().ap, objs.getPlayer().ad, objs.getPlayer().mp, objs.getPlayer().md, objs.getPlayer().crit, objs.getPlayer().critID);
+
+      for (let i = 0; i <= 7; i++) {
+        this.addImage(width*(0.02), height*(baseY), otherStrings[i], 1).on('pointerover', () => this.toggleDisplayText(textObjs[i], true)).on('pointerout', () => this.toggleDisplayText(textObjs[i], false));
+        this.addClickableText(width*(0.045), height*(baseY2), someObj[i], mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[i], true)).on('pointerout', () => this.toggleDisplayText(textObjs[i], false));
+        baseY = baseY + 0.035;
+        baseY2 = baseY2 + 0.035;
+      }
+
+
+      //this.addClickableText(width*(0.045), height*(0.54), playerHealth, mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
+      //this.addClickableText(width*(0.045), height*(0.575), playerMana, mainFontFamily, '12px', mainFontColor);
+      //this.addClickableText(width*(0.045), height*(0.61), objs.getPlayer().ap, mainFontFamily, '12px', mainFontColor);
+      //this.addClickableText(width*(0.045), height*(0.645), objs.getPlayer().ad, mainFontFamily, '12px', mainFontColor);
+      //this.addClickableText(width*(0.045), height*(0.68), objs.getPlayer().mp, mainFontFamily, '12px', mainFontColor);
+      //this.addClickableText(width*(0.045), height*(0.715), objs.getPlayer().md, mainFontFamily, '12px', mainFontColor);
+      //this.addClickableText(width*(0.045), height*(0.75), objs.getPlayer().crit, mainFontFamily, '12px', mainFontColor);
+
+      //this.addImage(width*(0.02), height*(0.55), 'heartIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
+      //this.addImage(width*(0.02), height*(0.585), 'manaIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[1], true)).on('pointerout', () => this.toggleDisplayText(textObjs[1], false));
+      //this.addImage(width*(0.02), height*(0.62), 'apIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[2], true)).on('pointerout', () => this.toggleDisplayText(textObjs[2], false));
+      //this.addImage(width*(0.02), height*(0.655), 'adIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[3], true)).on('pointerout', () => this.toggleDisplayText(textObjs[3], false));
+      //this.addImage(width*(0.02), height*(0.69), 'mpIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[4], true)).on('pointerout', () => this.toggleDisplayText(textObjs[4], false));
+      //this.addImage(width*(0.02), height*(0.725), 'mdIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[5], true)).on('pointerout', () => this.toggleDisplayText(textObjs[5], false));
+      //this.addImage(width*(0.02), height*(0.76), 'critIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[6], true)).on('pointerout', () => this.toggleDisplayText(textObjs[6], false));
+      //this.addImage(width*(0.02), height*(0.795), 'critEffect', 1).on('pointerover', () => this.toggleDisplayText(textObjs[7], true)).on('pointerout', () => this.toggleDisplayText(textObjs[7], false));
 
       //this.toggleDisplayText(this.someText, false);
 
-      let playerHealth = objs.getPlayer().hp + "/" + objs.getPlayer().maxHP;
-      let playerMana = objs.getPlayer().mana + "/" + objs.getPlayer().maxMana;
-      this.addClickableText(width*(0.045), height*(0.54), playerHealth, mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
-      this.addClickableText(width*(0.045), height*(0.575), playerMana, mainFontFamily, '12px', mainFontColor);
-      this.addClickableText(width*(0.045), height*(0.61), objs.getPlayer().ap, mainFontFamily, '12px', mainFontColor);
-      this.addClickableText(width*(0.045), height*(0.645), objs.getPlayer().ad, mainFontFamily, '12px', mainFontColor);
-      this.addClickableText(width*(0.045), height*(0.68), objs.getPlayer().mp, mainFontFamily, '12px', mainFontColor);
-      this.addClickableText(width*(0.045), height*(0.715), objs.getPlayer().md, mainFontFamily, '12px', mainFontColor);
-      this.addClickableText(width*(0.045), height*(0.75), objs.getPlayer().crit, mainFontFamily, '12px', mainFontColor);
 
       if (objs.getPlayer().critID == "") {
 
@@ -95,9 +112,9 @@ export default class Fight extends Phaser.Scene {
       }
 
 
-      this.addClickableText(width*(0.045), height*(0.785), objs.getPlayer().critID, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
+      //this.addClickableText(width*(0.045), height*(0.785), objs.getPlayer().critID, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
 
-      this.addClickableText(width*(0.8), height*(0.9), "START", mainFontFamily, '24px', mainFontColor).on('pointerdown', () => this.doNothing());
+      //this.addClickableText(width*(0.8), height*(0.9), "START", mainFontFamily, '24px', mainFontColor).on('pointerdown', () => this.doNothing());
       
  
       //==============================
