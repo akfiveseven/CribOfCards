@@ -50,32 +50,43 @@ export default class Fight extends Phaser.Scene {
       console.log(seedSize);
       console.log(seedIndex);
 
+      let statStrings = ["player health - current hp / max hp", "player mana - current mana / max mana", "H3", "H4", "H5", "H6", "H7", "H8"];
+      let textObjs = [];
+
+      for (let i = 0; i < 8; i++) {
+        textObjs.push(this.addClickableText(width*(0.01), height*(0.5), statStrings[i], mainFontFamily, '12px', mainFontColor));
+        this.toggleDisplayText(textObjs[i], false);
+      }
+
+
 
       this.addClickableText(centerX, centerY, "<GET RANDOM>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.getRandomNumberFromSeed());
-      //this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs }) );
+      this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs }) );
 
 
       this.addImage(width*(0.065), height*(0.90), 'character', 1.5);
       this.addImage(width*(0.035), height*(0.05), 'deckIcon', 1);
 
-      this.addImage(width*(0.02), height*(0.55), 'heartIcon', 1);
-      this.addImage(width*(0.02), height*(0.585), 'manaIcon', 1);
-      this.addImage(width*(0.02), height*(0.62), 'apIcon', 1);
-      this.addImage(width*(0.02), height*(0.655), 'adIcon', 1);
-      this.addImage(width*(0.02), height*(0.69), 'mpIcon', 1);
-      this.addImage(width*(0.02), height*(0.725), 'mdIcon', 1);
-      this.addImage(width*(0.02), height*(0.76), 'critIcon', 1);
-      this.addImage(width*(0.02), height*(0.795), 'critEffect', 1);
+      this.addImage(width*(0.02), height*(0.55), 'heartIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
+      this.addImage(width*(0.02), height*(0.585), 'manaIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[1], true)).on('pointerout', () => this.toggleDisplayText(textObjs[1], false));
+      this.addImage(width*(0.02), height*(0.62), 'apIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[2], true)).on('pointerout', () => this.toggleDisplayText(textObjs[2], false));
+      this.addImage(width*(0.02), height*(0.655), 'adIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[3], true)).on('pointerout', () => this.toggleDisplayText(textObjs[3], false));
+      this.addImage(width*(0.02), height*(0.69), 'mpIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[4], true)).on('pointerout', () => this.toggleDisplayText(textObjs[4], false));
+      this.addImage(width*(0.02), height*(0.725), 'mdIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[5], true)).on('pointerout', () => this.toggleDisplayText(textObjs[5], false));
+      this.addImage(width*(0.02), height*(0.76), 'critIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[6], true)).on('pointerout', () => this.toggleDisplayText(textObjs[6], false));
+      this.addImage(width*(0.02), height*(0.795), 'critEffect', 1).on('pointerover', () => this.toggleDisplayText(textObjs[7], true)).on('pointerout', () => this.toggleDisplayText(textObjs[7], false));
+
+      //this.toggleDisplayText(this.someText, false);
 
       let playerHealth = objs.getPlayer().hp + "/" + objs.getPlayer().maxHP;
       let playerMana = objs.getPlayer().mana + "/" + objs.getPlayer().maxMana;
-      this.addClickableText(width*(0.06), height*(0.55), playerHealth, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
-      this.addClickableText(width*(0.06), height*(0.585), playerMana, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
-      this.addClickableText(width*(0.055), height*(0.62), objs.getPlayer().ap, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
-      this.addClickableText(width*(0.055), height*(0.655), objs.getPlayer().ad, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
-      this.addClickableText(width*(0.055), height*(0.69), objs.getPlayer().mp, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
-      this.addClickableText(width*(0.055), height*(0.725), objs.getPlayer().md, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
-      this.addClickableText(width*(0.055), height*(0.76), objs.getPlayer().crit, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
+      this.addClickableText(width*(0.045), height*(0.54), playerHealth, mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
+      this.addClickableText(width*(0.045), height*(0.575), playerMana, mainFontFamily, '12px', mainFontColor);
+      this.addClickableText(width*(0.045), height*(0.61), objs.getPlayer().ap, mainFontFamily, '12px', mainFontColor);
+      this.addClickableText(width*(0.045), height*(0.645), objs.getPlayer().ad, mainFontFamily, '12px', mainFontColor);
+      this.addClickableText(width*(0.045), height*(0.68), objs.getPlayer().mp, mainFontFamily, '12px', mainFontColor);
+      this.addClickableText(width*(0.045), height*(0.715), objs.getPlayer().md, mainFontFamily, '12px', mainFontColor);
+      this.addClickableText(width*(0.045), height*(0.75), objs.getPlayer().crit, mainFontFamily, '12px', mainFontColor);
 
       if (objs.getPlayer().critID == "") {
 
@@ -84,7 +95,7 @@ export default class Fight extends Phaser.Scene {
       }
 
 
-      this.addClickableText(width*(0.055), height*(0.795), objs.getPlayer().critID, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
+      this.addClickableText(width*(0.045), height*(0.785), objs.getPlayer().critID, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
 
       this.addClickableText(width*(0.8), height*(0.9), "START", mainFontFamily, '24px', mainFontColor).on('pointerdown', () => this.doNothing());
       
@@ -110,13 +121,17 @@ export default class Fight extends Phaser.Scene {
       return result;
     }
 
+    hoverStat() {
+
+    }
+
     //================================================= PHASER TEXT & IMAGE OBJECTS =================================================== 
     addClickableText(posX, posY, text, family, size, color, func) { // ONLY WORKS IF clickFunc has no parameters
 
 
       let result = this.add.text(posX, posY, text, { fontFamily: family, fontSize: size, fill: color })
-        .setOrigin(0.5, 0.5)
         .setInteractive();
+        //.setOrigin(0.5, 0.5)
 
       return result;
 
