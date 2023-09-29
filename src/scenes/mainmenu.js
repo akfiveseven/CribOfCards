@@ -37,12 +37,10 @@ export default class MainMenu extends Phaser.Scene
         mainFontColor = '#ded9cc';
         bgColor = '#2e2e2e';
         mainFontFamily = 'MyCustomFont';
-        versionString = "v0.2.1a";
+        versionString = "v0.2.2a";
 
         objs = new Objects();
 
-        seed = Math.random();
-        seedIndex = 0;
 
         console.log("Initial window width: " + width);        
         console.log("Initial window height: " + height);        
@@ -66,9 +64,8 @@ export default class MainMenu extends Phaser.Scene
         backMusic.setLoop(true);
         backMusic.setVolume(1);
         backMusic.play();
-
         
-        inputField = this.add.dom(width*(0.055), height*(0.93), 'input', 'background-color: white;');
+        inputField = this.add.dom(width*(0.105), height*(0.93), 'input', 'background-color: white;');
         inputField.setOrigin(0.5, 0.5);
         inputField.node.setAttribute('placeholder', 'random seed');
 
@@ -80,12 +77,10 @@ export default class MainMenu extends Phaser.Scene
         inputField.node.style.border = "none";
         inputField.node.style.outline = "none";
         inputField.node.style.width = "75%";
-        
 
-        var submitButton = this.add.dom(centerX*(0.925), centerY*(1.3), 'button', '', 'play');
+        var submitButton = this.add.dom(centerX*(0.90), centerY*(1.3), 'button', '', 'play');
 
         submitButton.node.setAttribute('type', 'submit');
-
         
         submitButton.node.style.color = "#ded9cc";
         submitButton.node.style.textDecoration = "none";
@@ -108,7 +103,7 @@ export default class MainMenu extends Phaser.Scene
 
         this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
         this.titleImg = this.add.image(centerX, height*(0.15), 'logo').setScale(this.scaleRatio, this.scaleRatio);
-        this.versionText = this.add.text(width*(0.90), height*(0.93), versionString, { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
+        this.versionText = this.add.text(width*(0.85), height*(0.93), versionString, { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
 
 
     }
@@ -131,13 +126,20 @@ export default class MainMenu extends Phaser.Scene
 
     initSeed() {
 
+      seedIndex = 0;
 
 
 
       let inputSeed = inputField.node.value;
       if (inputSeed != "") {
-        seed = inputSeed; 
+        console.log("INPUT SEED: " + inputSeed);
+        seed = Number(inputSeed); 
       }
+      else {
+        seed = Math.random();
+        console.log("RANDOM SEED IS: " + seed);
+      }
+
 
       const generator = seedrandom(seed);
 

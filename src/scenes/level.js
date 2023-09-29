@@ -43,7 +43,7 @@ export default class Level extends Phaser.Scene {
       this.add.text(centerX, centerY-100, "<GET RANDOM>", { fontFamily: 'MyCustomFont', fontSize: '48px', fill: '#ded9cc' })
         .setOrigin(0.5, 0.5)
         .setInteractive()
-        .on('pointerdown', () => this.getRandomNumberFromSeed());
+        .on('pointerdown', () => this.getRoll());
 
       console.log("Seed passed is: " + seed);
       console.log(seedSize);
@@ -75,6 +75,15 @@ export default class Level extends Phaser.Scene {
 
     this.scene.start('fight', { seedOut: seed, seedSizeOut: seedSize, seedIndexOut: seedIndex, objsOut: objs });
 
+  }
+
+  getRoll() {
+    let tensDigit = this.getRandomNumberFromSeed();
+    tensDigit = tensDigit * 10;
+    let onesDigit = this.getRandomNumberFromSeed();
+    let result = tensDigit + onesDigit;
+    console.log("RESULT: " + result);
+    return result;
   }
 
   getRandomNumberFromSeed() {
