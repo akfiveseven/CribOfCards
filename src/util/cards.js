@@ -80,23 +80,23 @@ export default class cards {
 
     initPlayerCards() {
         cardArray.push(pokeCard);
-        //cardArray.push(stabCard);
+        cardArray.push(stabCard);
         cardArray.push(arcaneShotCard);
         cardArray.push(arcanePulseCard);
-        //cardArray.push(arcaneStrikeCard);
-        //cardArray.push(arcaneBlastCard);
-        //cardArray.push(arcaneExplosionCard);
-        //cardArray.push(arcaneEruptionCard);
-        //cardArray.push(bandageCard);
-        //cardArray.push(meditateCard);
-        //cardArray.push(medkitCard);
-        //cardArray.push(channelCard);
+        cardArray.push(arcaneStrikeCard);
+        cardArray.push(arcaneBlastCard);
+        cardArray.push(arcaneExplosionCard);
+        cardArray.push(arcaneEruptionCard);
+        cardArray.push(bandageCard);
+        cardArray.push(meditateCard);
+        cardArray.push(medkitCard);
+        cardArray.push(channelCard);
         cardArray.push(beerCard);
         cardArray.push(studyCard);
-        //cardArray.push(friskCard);
-        for (let i = 0; i < 3; i++) {
-            this.pushACard();
-        }
+        cardArray.push(friskCard);
+        //for (let i = 0; i < 3; i++) {
+            //this.pushACard();
+        //}
     }
 
     pushACard() {
@@ -145,6 +145,11 @@ export default class cards {
     pushRandomCard() {
 	    let b = Math.floor(Math.random() * restCards.length);	
 	    cardArray.push(restCards[b]);
+    }
+
+    getRandomCard(randNum) {
+      let a = Math.floor(randNum * cardArray.length);
+      return cardArray[a];
     }
 
     initSlimeCards() {
@@ -235,7 +240,7 @@ var bandageCard = new cards("hp", 2, 8, 5, 1, 'blank', "Bandage", "X");
 var meditateCard = new cards("mana", 2, 9, 12, 2, 'blank', "Meditate", "X");
 var medkitCard = new cards("hp", 2, 10, 30, 5, 'blank', "Medkit", "X");
 var channelCard = new cards("mana", 2, 11, 50, 10, 'blank', "Channel", "X");
-var beerCard = new cards("mana", 2, 12, 95, 15, 'beer', "Beer", "X");
+var beerCard = new cards("mana", 2, 12, 95, 15, 'blank', "Beer", "X");
 var studyCard = new cards("mag", 3, 13, 1.1, 15, 'blank', "Study", "X");
 var friskCard = new cards("crit", 3, 14, 1.1, 10, 'blank', "Frisk", "X");
 

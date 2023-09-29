@@ -133,7 +133,11 @@ export default class MainMenu extends Phaser.Scene
       let inputSeed = inputField.node.value;
       if (inputSeed != "") {
         console.log("INPUT SEED: " + inputSeed);
-        seed = Number(inputSeed); 
+        //seed = Number(inputSeed); 
+        seed = inputSeed; 
+        if (inputSeed[0] == "0" && inputSeed[1] == ".") {
+          seed = Number(inputSeed);
+        }
       }
       else {
         seed = Math.random();

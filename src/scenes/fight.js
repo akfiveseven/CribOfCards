@@ -17,6 +17,16 @@ var seed;
 var objs;
 
 var cardArray = [];
+var cardTextArray = [];
+var manaTextArray = [];
+
+var turnCount;
+var player;
+var deckObj;
+
+var statsObj = [];
+
+var someFlag = false;
 
 
 export default class Fight extends Phaser.Scene {
@@ -32,6 +42,7 @@ export default class Fight extends Phaser.Scene {
         mainFontColor = '#ded9cc';
         bgColor = '#2e2e2e';
         mainFontFamily = 'MyCustomFont';
+        turnCount = 1;
         //this.initSeed();
     }
 
@@ -41,6 +52,7 @@ export default class Fight extends Phaser.Scene {
         seedSize = data.seedSizeOut;
         seedIndex = data.seedIndexOut;
         objs = data.objsOut;
+        player = objs.getPlayer();
     }
 
 
@@ -49,72 +61,59 @@ export default class Fight extends Phaser.Scene {
       console.log("fight seed passed: " + seed);
       console.log(seedSize);
       console.log(seedIndex);
+      deckObj = objs.getDeck();
+
+      this.turnText = this.addClickableText(width*(0.07), height*(0.05), "Turn " + turnCount, mainFontFamily, '18px', mainFontColor);
+
+      deckObj.initPlayerCards();
+
 
       let statStrings = ["player health - current hp / max hp", "player mana - current mana / max mana", "H3", "H4", "H5", "H6", "H7", "H8"];
       let otherStrings = ['heartIcon', 'manaIcon', 'apIcon', 'adIcon', 'mpIcon', 'mdIcon', 'critIcon', 'critEffect'];
       let textObjs = [];
 
       for (let i = 0; i < 8; i++) {
-        textObjs.push(this.addClickableText(width*(0.01), height*(0.5), statStrings[i], mainFontFamily, '12px', mainFontColor));
+        textObjs.push(this.addClickableText(width*(0.01), height*(0.3), statStrings[i], mainFontFamily, '12px', mainFontColor));
         this.toggleDisplayText(textObjs[i], false);
       }
 
 
 
-      this.addClickableText(centerX, centerY, "<GET RANDOM>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.getRandomNumberFromSeed());
-      this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs }) );
+      //this.addClickableText(centerX, centerY, "<GET RANDOM>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.getRandomNumberFromSeed());
+      //this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs }) );
 
 
       this.addImage(width*(0.065), height*(0.90), 'character', 1.5);
+      this.addImage(width*(0.8), height*(0.3), 'slime', 2);
+      this.pHPSprite = this.add.sprite(width*(0.065), height*(0.755), 'hpspritesheet', 10).setOrigin(0.5, 0.5).setScale(1); // player hp sprite
       this.addImage(width*(0.035), height*(0.05), 'deckIcon', 1);
 
-      let playerHealth = objs.getPlayer().hp + "/" + objs.getPlayer().maxHP;
-      let playerMana = objs.getPlayer().mana + "/" + objs.getPlayer().maxMana;
+      let playerHealth = player.hp + "/" + player.maxHP;
+      let playerMana = player.mana + "/" + player.maxMana;
 
       let baseY = 0.35; // add 0.035
       let baseY2 = 0.34; // add 0.035
 
       let someObj = [];
-      someObj.push(playerHealth, playerMana, objs.getPlayer().ap, objs.getPlayer().ad, objs.getPlayer().mp, objs.getPlayer().md, objs.getPlayer().crit, objs.getPlayer().critID);
+      someObj.push(playerHealth, playerMana, player.ap, player.ad, player.mp, player.md, player.crit, player.critID);
 
       for (let i = 0; i <= 7; i++) {
         this.addImage(width*(0.02), height*(baseY), otherStrings[i], 1).on('pointerover', () => this.toggleDisplayText(textObjs[i], true)).on('pointerout', () => this.toggleDisplayText(textObjs[i], false));
-        this.addClickableText(width*(0.045), height*(baseY2), someObj[i], mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[i], true)).on('pointerout', () => this.toggleDisplayText(textObjs[i], false));
+        statsObj.push(this.addClickableText(width*(0.045), height*(baseY2), someObj[i], mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[i], true)).on('pointerout', () => this.toggleDisplayText(textObjs[i], false)));
+        //statsObj[i].setActive(false).setVisible(false);
         baseY = baseY + 0.035;
         baseY2 = baseY2 + 0.035;
       }
+      someFlag = true;
 
 
-      //this.addClickableText(width*(0.045), height*(0.54), playerHealth, mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
-      //this.addClickableText(width*(0.045), height*(0.575), playerMana, mainFontFamily, '12px', mainFontColor);
-      //this.addClickableText(width*(0.045), height*(0.61), objs.getPlayer().ap, mainFontFamily, '12px', mainFontColor);
-      //this.addClickableText(width*(0.045), height*(0.645), objs.getPlayer().ad, mainFontFamily, '12px', mainFontColor);
-      //this.addClickableText(width*(0.045), height*(0.68), objs.getPlayer().mp, mainFontFamily, '12px', mainFontColor);
-      //this.addClickableText(width*(0.045), height*(0.715), objs.getPlayer().md, mainFontFamily, '12px', mainFontColor);
-      //this.addClickableText(width*(0.045), height*(0.75), objs.getPlayer().crit, mainFontFamily, '12px', mainFontColor);
 
-      //this.addImage(width*(0.02), height*(0.55), 'heartIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[0], true)).on('pointerout', () => this.toggleDisplayText(textObjs[0], false));
-      //this.addImage(width*(0.02), height*(0.585), 'manaIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[1], true)).on('pointerout', () => this.toggleDisplayText(textObjs[1], false));
-      //this.addImage(width*(0.02), height*(0.62), 'apIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[2], true)).on('pointerout', () => this.toggleDisplayText(textObjs[2], false));
-      //this.addImage(width*(0.02), height*(0.655), 'adIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[3], true)).on('pointerout', () => this.toggleDisplayText(textObjs[3], false));
-      //this.addImage(width*(0.02), height*(0.69), 'mpIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[4], true)).on('pointerout', () => this.toggleDisplayText(textObjs[4], false));
-      //this.addImage(width*(0.02), height*(0.725), 'mdIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[5], true)).on('pointerout', () => this.toggleDisplayText(textObjs[5], false));
-      //this.addImage(width*(0.02), height*(0.76), 'critIcon', 1).on('pointerover', () => this.toggleDisplayText(textObjs[6], true)).on('pointerout', () => this.toggleDisplayText(textObjs[6], false));
-      //this.addImage(width*(0.02), height*(0.795), 'critEffect', 1).on('pointerover', () => this.toggleDisplayText(textObjs[7], true)).on('pointerout', () => this.toggleDisplayText(textObjs[7], false));
-
-      //this.toggleDisplayText(this.someText, false);
+      this.makeCards();
+      this.endButton = this.addClickableText(width*(0.85), height*(0.95), "END", mainFontFamily, '24px', mainFontColor)
+        .setActive(false).setVisible(false)
+        .on('pointerdown', () => this.clickEnd());
 
 
-      if (objs.getPlayer().critID == "") {
-
-      } else if (objs.getPlayer.critID == "") {
-
-      }
-
-
-      //this.addClickableText(width*(0.045), height*(0.785), objs.getPlayer().critID, mainFontFamily, '12px', mainFontColor).on('pointerdown', () => this.doNothing());
-
-      //this.addClickableText(width*(0.8), height*(0.9), "START", mainFontFamily, '24px', mainFontColor).on('pointerdown', () => this.doNothing());
       
  
       //==============================
@@ -122,12 +121,93 @@ export default class Fight extends Phaser.Scene {
       
     }
 
+    makeCards() {
+      let baseX = 0;
+      for (let i = 0; i <= 8; i++) {
+        let randomNum = this.getRoll() / 100;
+        let card = deckObj.getRandomCard(randomNum);
+
+
+
+        let node = this.addImage(width*(0.185)+baseX, height*(0.85), card.spriteImage, 0.75)
+          .on('pointerdown', () => this.clickCard(i, card));
+        let nodeText = this.addClickableText(width*(0.185)+baseX, height*(0.85)+20, card.ann, mainFontFamily, '12px', mainFontColor).setOrigin(0.5, 0.5);
+        let manaText = this.addClickableText(width*(0.185)+baseX-26, height*(0.85)-43, card.cost, mainFontFamily, '10px', mainFontColor).setOrigin(0.5, 0.5);
+        cardArray.push(node);
+        cardTextArray.push(nodeText);
+        manaTextArray.push(manaText);
+        baseX = baseX + 85;
+      }
+    }
+
+
+    clickCard(index, card) {
+      if (player.mana >= card.cost) {
+        this.endButton.setActive(true).setVisible(true);
+        player.mana = player.mana - card.cost;
+        cardArray[index].setActive(false).setVisible(false);
+        cardTextArray[index].setActive(false).setVisible(false);
+        manaTextArray[index].setActive(false).setVisible(false);
+      }
+
+    }
+
+
+    clickEnd() {
+      for (let i = 0; i < cardArray.length; i++) {
+        cardArray[i].setActive(false).setVisible(false);
+        cardTextArray[i].setActive(false).setVisible(false);
+        manaTextArray[i].setActive(false).setVisible(false);
+      }
+      cardArray = [];
+      cardTextArray = [];
+      manaTextArray = [];
+      turnCount++;
+      this.makeCards();
+      this.endButton.setActive(false).setVisible(false);
+      
+    }
+
     ss() {
       console.log("SDFJH");
     }
 
-    update() {
+    calcHealth() {
+      let health = player.hp / player.maxHP;
+      health = health * 10;
+      health = parseInt(health);
+      if (health == 0) {
+        health = 1;
+      }
+      this.pHPSprite.setFrame(health);
+      if (player.hp == 0) {
+        this.pHPSprite.setFrame(0);
+      }
+    }
 
+    refreshStats() {
+      //statsObj[1].setText(player.mana + "/" player.maxMana);
+      /*
+      if (someFlag == true) {
+      }
+      */
+      statsObj[0].setText(player.hp + "/" + player.maxHP);
+      statsObj[1].setText(player.mana + "/" + player.maxMana);
+      statsObj[2].setText(player.ap);
+      statsObj[3].setText(player.ad);
+      statsObj[4].setText(player.mp);
+      statsObj[5].setText(player.md);
+      statsObj[6].setText(player.crit);
+      statsObj[7].setText(player.critID);
+      
+    }
+
+    update() {
+      if (someFlag == true) {
+        this.refreshStats();
+      }
+      this.calcHealth();
+      this.turnText.setText("Turn " + turnCount);
     }
 
     addImage(posX, posY, img, scale) {
@@ -143,7 +223,7 @@ export default class Fight extends Phaser.Scene {
     }
 
     //================================================= PHASER TEXT & IMAGE OBJECTS =================================================== 
-    addClickableText(posX, posY, text, family, size, color, func) { // ONLY WORKS IF clickFunc has no parameters
+    addClickableText(posX, posY, text, family, size, color) { // ONLY WORKS IF clickFunc has no parameters
 
 
       let result = this.add.text(posX, posY, text, { fontFamily: family, fontSize: size, fill: color })

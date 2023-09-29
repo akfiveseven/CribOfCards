@@ -18,7 +18,7 @@ import coinIcon from '../../assets/textures/sprites/coin.png';
 import heartIcon from '../../assets/textures/sprites/hearticon.png';
 import manaIcon from '../../assets/textures/sprites/manaicon.png';
 import deckIcon from '../../assets/textures/sprites/deckSprite.png';
-
+import cardSprite from '../../assets/textures/cards/blank_card.png';
 
 export default class Preloader extends Phaser.Scene
 {
@@ -59,6 +59,7 @@ export default class Preloader extends Phaser.Scene
         this.load.image('heartIcon', heartIcon);
         this.load.image('manaIcon', manaIcon);
         this.load.image('deckIcon', deckIcon);
+        this.load.image('blank', cardSprite);
 
     }
 

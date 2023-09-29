@@ -8,7 +8,7 @@ var deckObject;
 export default class Objects {
 
   constructor() {
-    playerObject = new entity("PLAYER", 100, 100, 150, 150, 5, 35, 3, 5, 0.25, 'character', 0, 1, 2);
+    playerObject = new entity("PLAYER", 100, 100, 150, 150, 5, 35, 3, 5, 0.25, 'character', 0, 1, 1);
     deckObject = new cards();
   }
 
