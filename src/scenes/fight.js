@@ -55,7 +55,8 @@ export default class Fight extends Phaser.Scene {
       //this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs }) );
 
 
-      this.addImage(width*(0.06), height*(0.90), 'character', 1.5);
+      this.addImage(width*(0.065), height*(0.90), 'character', 1.5);
+      this.addImage(width*(0.035), height*(0.05), 'deckIcon', 1);
 
       this.addImage(width*(0.02), height*(0.55), 'heartIcon', 1);
       this.addImage(width*(0.02), height*(0.585), 'manaIcon', 1);
