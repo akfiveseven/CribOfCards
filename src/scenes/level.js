@@ -79,13 +79,14 @@ export default class Level extends Phaser.Scene {
       else if (player.stage == 2) {
         //this.levelText.setActive(false).setVisible(false);
         this.addClickableText(centerX, height*(0.15), "You won! Pick a card.", '36px');
-        let baseX = width*(0.40);
+        let baseX = centerX-75;
         for (let i = 0; i < 2; i++) {
 
           let roll = this.getRoll();
           let myCard = deckObj.getRestCard(this.getRoll());
           this.add.image(baseX, centerY, myCard.spriteImage).on('pointerdown', () => this.addCard(myCard));
           this.addClickableText(baseX, centerY+25, myCard.ann, '16px').on('pointerdown', () => this.addCard(myCard));
+          this.addClickableText(baseX-35, centerY-55, myCard.cost, '16px');
           baseX = baseX + 150;
         }
       }
