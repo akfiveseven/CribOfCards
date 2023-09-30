@@ -239,10 +239,10 @@ var slimeSmash = new cards("mag", 1, 2, 35, 0, '', "Slimey SMASH", "X");
 var slimeHeal = new cards("hp", 2, 3, 500, 0, '', "Slimey Heal", "X")
 
 // PLAYER CARDS
-var pokeCard = new cards("atk", 1, 0, 2, 0, 'blank', "Poke", "X");
-var stabCard = new cards("atk", 1, 1, 9, 3, 'blank', "Stab", "X");
-var arcaneShotCard = new cards("mag", 1, 2, 10, 3, 'blank', "Arcane\nShot", "X");
-var arcanePulseCard = new cards("mag", 1, 3, 20, 3, 'blank', "Arcane\nPulse", "X");
+var pokeCard = new cards("atk", 1, 0, 2, 0, 'blank', "Poke", "Poke | AP Atk | Cost: 0 | BP: 2");
+var stabCard = new cards("atk", 1, 1, 9, 3, 'blank', "Stab", "Stab | AP Atk | Cost: 3 | BP: 9");
+var arcaneShotCard = new cards("mag", 1, 2, 10, 3, 'blank', "Arcane\nShot", "Arcane Shot | MP Atk | Cost: 3 | BP: 10");
+var arcanePulseCard = new cards("mag", 1, 3, 20, 3, 'blank', "Arcane\nPulse", "Arcane Pulse | MP Atk | Cost: 3 | BP: 20");
 var arcaneStrikeCard = new cards("mag", 1, 4, 40, 5, 'blank', "Arcane\nStrike", "X");
 var arcaneBlastCard = new cards("mag", 1, 5, 100, 10, 'blank', "Arcane\nBlast", "X");
 var arcaneExplosionCard = new cards("mag", 1, 6, 250, 20, 'blank', "Arcane\nExplosion", "X");

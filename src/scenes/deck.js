@@ -65,6 +65,7 @@ export default class Deck extends Phaser.Scene {
       this.myImg = this.add.image(centerX, centerY, x[idx].spriteImage);
       this.myText = this.addClickableText(centerX, centerY+25, x[idx].ann, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
       this.myText2 = this.addClickableText(centerX, centerY-100, "Card: " + (idx+1) + "/" + x.length, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.myText3 = this.addClickableText(centerX, centerY+100, x[idx].cap, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
       this.addClickableText(centerX+100, centerY+25, "NEXT", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.nextClick());
       this.addClickableText(centerX-100, centerY+25, "PREV", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.prevClick());
       this.addClickableText(centerX, centerY+200, "EXIT", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.exitDeck());
@@ -87,6 +88,7 @@ export default class Deck extends Phaser.Scene {
       this.myText.setActive(false).setVisible(false);
       this.myImg = this.add.image(centerX, centerY, x[idx].spriteImage);
       this.myText = this.addClickableText(centerX, centerY+25, x[idx].ann, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.myText3.setText(x[idx].cap);
     }
 
     prevClick() {
@@ -97,6 +99,7 @@ export default class Deck extends Phaser.Scene {
       this.myText.setActive(false).setVisible(false);
       this.myImg = this.add.image(centerX, centerY, x[idx].spriteImage);
       this.myText = this.addClickableText(centerX, centerY+25, x[idx].ann, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.myText3.setText(x[idx].cap);
     }
 
 

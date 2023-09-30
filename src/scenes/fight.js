@@ -72,6 +72,8 @@ export default class Fight extends Phaser.Scene {
       statsObj = [];
       cardTextArray = [];
       manaTextArray = [];
+      this.hoverText = this.addClickableText(width*(0.1555), height*(0.95), "hello", mainFontFamily, '16px', mainFontColor);
+      this.hoverText.setActive(false).setVisible(false);
       console.log("fight seed passed: " + seed);
       console.log(seedSize);
       console.log(seedIndex);
@@ -170,14 +172,23 @@ export default class Fight extends Phaser.Scene {
 
 
         let node = this.addImage(width*(0.185)+baseX, height*(0.85), myCardArr[i].spriteImage, 0.75)
-          .on('pointerdown', () => this.clickCard(i, myCardArr[i]));
-        let nodeText = this.addClickableText(width*(0.185)+baseX, height*(0.85)+20, myCardArr[i].ann, mainFontFamily, '12px', mainFontColor).setOrigin(0.5, 0.5).on('pointerdown', () => this.clickCard(i, myCardArr[i]));
+          .on('pointerdown', () => this.clickCard(i, myCardArr[i])).on('pointerover', () => this.hoverCard(myCardArr[i])).on('pointerout', () => this.disableCap());
+        let nodeText = this.addClickableText(width*(0.185)+baseX, height*(0.85)+20, myCardArr[i].ann, mainFontFamily, '12px', mainFontColor).setOrigin(0.5, 0.5).on('pointerdown', () => this.clickCard(i, myCardArr[i])).on('pointerover', () => this.hoverCard(myCardArr[i])).on('pointerout', () => this.disableCap());
         let manaText = this.addClickableText(width*(0.185)+baseX-26, height*(0.85)-43, myCardArr[i].cost, mainFontFamily, '10px', mainFontColor).setOrigin(0.5, 0.5);
         cardArray.push(node);
         cardTextArray.push(nodeText);
         manaTextArray.push(manaText);
-        baseX = baseX + 85;
+        baseX = baseX + 100;
       }
+    }
+
+    hoverCard(card) {
+      this.hoverText.setText(card.cap);
+      this.hoverText.setActive(true).setVisible(true);
+    }
+
+    disableCap() {
+      this.hoverText.setActive(false).setVisible(false);
     }
 
     makeCards() {
@@ -191,13 +202,13 @@ export default class Fight extends Phaser.Scene {
         myCardArr.push(card);
 
         let node = this.addImage(width*(0.185)+baseX, height*(0.85), card.spriteImage, 0.75)
-          .on('pointerdown', () => this.clickCard(i, card));
-        let nodeText = this.addClickableText(width*(0.185)+baseX, height*(0.85)+20, card.ann, mainFontFamily, '12px', mainFontColor).setOrigin(0.5, 0.5).on('pointerdown', () => this.clickCard(i, card));
+          .on('pointerdown', () => this.clickCard(i, card)).on('pointerover', () => this.hoverCard(card)).on('pointerout', () => this.disableCap());
+        let nodeText = this.addClickableText(width*(0.185)+baseX, height*(0.85)+20, card.ann, mainFontFamily, '12px', mainFontColor).setOrigin(0.5, 0.5).on('pointerdown', () => this.clickCard(i, card)).on('pointerover', () => this.hoverCard(card)).on('pointerout', () => this.disableCap());
         let manaText = this.addClickableText(width*(0.185)+baseX-26, height*(0.85)-43, card.cost, mainFontFamily, '10px', mainFontColor).setOrigin(0.5, 0.5);
         cardArray.push(node);
         cardTextArray.push(nodeText);
         manaTextArray.push(manaText);
-        baseX = baseX + 85;
+        baseX = baseX + 100;
       }
     }
 
