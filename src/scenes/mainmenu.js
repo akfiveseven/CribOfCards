@@ -37,7 +37,7 @@ export default class MainMenu extends Phaser.Scene
         mainFontColor = '#ded9cc';
         bgColor = '#2e2e2e';
         mainFontFamily = 'MyCustomFont';
-        versionString = "v0.2.2a";
+        versionString = "v0.2.3a";
 
         objs = new Objects();
 

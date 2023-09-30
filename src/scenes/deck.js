@@ -1,5 +1,6 @@
-//fight.js
+//deck.js
 import Phaser, { Scene } from "phaser";
+import Objects from "../util/objects.js"
 import entity from "../util/entity.js"
 import seedrandom from 'seedrandom';
 
@@ -28,21 +29,16 @@ var deckObj;
 var statsObj = [];
 
 var someFlag = false;
-var anotherFlag = false;
-var storedCards = [];
-
-var myCardArr = [];
-
-var myOtherFlag = false;
+let x, idx;
 
 //const slime = new entity("Sticky Slime", 10, 10, 0, 0, 10, 10, 25, 0, 0, 'slime', 0, 0);
 
 
-export default class Fight extends Phaser.Scene {
+export default class Deck extends Phaser.Scene {
 
     constructor() {
 
-        super({ key: 'fight' });
+        super({ key: 'deck' });
 
         width = window.innerWidth;
         height = window.innerHeight;
@@ -52,143 +48,65 @@ export default class Fight extends Phaser.Scene {
         bgColor = '#2e2e2e';
         mainFontFamily = 'MyCustomFont';
         turnCount = 1;
-        enemy = new entity("Sticky Slime", 100, 100, 0, 0, 10, 10, 25, 0, 0, 'slime', 0, 0);
         //this.initSeed();
     }
 
+
     init(data) {
-        //entityVar = data.playerEn;
-        seed = data.seedOut;
-        seedSize = data.seedSizeOut;
-        seedIndex = data.seedIndexOut;
-        objs = data.objsOut;
-        player = objs.getPlayer();
+        objs = data.objsPassed;
     }
 
 
 
     create() {
-      cardArray = [];
-      statsObj = [];
-      cardTextArray = [];
-      manaTextArray = [];
-      console.log("fight seed passed: " + seed);
-      console.log(seedSize);
-      console.log(seedIndex);
-      deckObj = objs.getDeck();
-      if (myOtherFlag == false) {
-        myOtherFlag = true;
-        deckObj.initPlayerCards();
-      }
-
-      this.turnText = this.addClickableText(width*(0.07), height*(0.05), "Turn " + turnCount, mainFontFamily, '18px', mainFontColor);
-
-      if (player.stage == 2) {
-        player.stage++;
-        enemy = new entity("Sticky Slime", 1000, 1000, 0, 0, 10, 10, 25, 0, 0, 'slime', 0, 0);
-        turnCount = 1;
-      }
-
-
-      let statStrings = ["player health - current hp / max hp", "player mana - current mana / max mana", "H3", "H4", "H5", "H6", "H7", "H8"];
-      let otherStrings = ['heartIcon', 'manaIcon', 'apIcon', 'adIcon', 'mpIcon', 'mdIcon', 'critIcon', 'critEffect'];
-      let textObjs = [];
-
-      for (let i = 0; i < 8; i++) {
-        textObjs.push(this.addClickableText(width*(0.01), height*(0.3), statStrings[i], mainFontFamily, '12px', mainFontColor));
-        this.toggleDisplayText(textObjs[i], false);
-      }
-
-
-
-      //this.addClickableText(centerX, centerY, "<GET RANDOM>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.getRandomNumberFromSeed());
-      //this.addClickableText(centerX, centerY-300, "<GOTO LEVEL>", mainFontFamily, '48px', mainFontColor).on('pointerdown', () => this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs }) );
-
-
-      this.addImage(width*(0.065), height*(0.90), 'character', 1.5);
-      this.addImage(width*(0.8), height*(0.35), enemy.img, 2);
-      this.pHPSprite = this.add.sprite(width*(0.065), height*(0.755), 'hpspritesheet', 10).setOrigin(0.5, 0.5).setScale(1); // player hp sprite
-      this.eHPSprite = this.add.sprite(width*(0.8), height*(0.1), 'hpspritesheet', 10).setOrigin(0.5, 0.5).setScale(2); // player hp sprite
-
-      let playerHealth = player.hp + "/" + player.maxHP;
-      let playerMana = player.mana + "/" + player.maxMana;
-
-      let baseY = 0.35; // add 0.035
-      let baseY2 = 0.34; // add 0.035
-
-      let someObj = [];
-      someObj.push(playerHealth, playerMana, player.ap, player.ad, player.mp, player.md, player.crit, player.critID);
-
-      for (let i = 0; i <= 7; i++) {
-        this.addImage(width*(0.02), height*(baseY), otherStrings[i], 1).on('pointerover', () => this.toggleDisplayText(textObjs[i], true)).on('pointerout', () => this.toggleDisplayText(textObjs[i], false));
-        statsObj.push(this.addClickableText(width*(0.045), height*(baseY2), someObj[i], mainFontFamily, '12px', mainFontColor).on('pointerover', () => this.toggleDisplayText(textObjs[i], true)).on('pointerout', () => this.toggleDisplayText(textObjs[i], false)));
-        //statsObj[i].setActive(false).setVisible(false);
-        baseY = baseY + 0.035;
-        baseY2 = baseY2 + 0.035;
-      }
-      someFlag = true;
-
-
-
-      if (anotherFlag == false) {
-        this.makeCards();
-      }
-      else {
-        this.loadCards();
-      }
-      this.endButton = this.addClickableText(width*(0.85), height*(0.95), "END", mainFontFamily, '24px', mainFontColor)
-        .setActive(false).setVisible(false)
-        .on('pointerdown', () => this.clickEnd());
-      this.deckIcon = this.addImage(width*(0.035), height*(0.05), 'deckIcon', 1).on('pointerdown', () => this.startDeckScene());
+      idx = 0;
+      x = objs;
+      x = x.getDeck().getCardArray();
+      this.myImg = this.add.image(centerX, centerY, x[idx].spriteImage);
+      this.myText = this.addClickableText(centerX, centerY+25, x[idx].ann, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.myText2 = this.addClickableText(centerX, centerY-100, "Card: " + (idx+1) + "/" + x.length, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.addClickableText(centerX+100, centerY+25, "NEXT", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.nextClick());
+      this.addClickableText(centerX-100, centerY+25, "PREV", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.prevClick());
+      this.addClickableText(centerX, centerY+200, "EXIT", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.exitDeck());
 
 
       
- 
-      //==============================
-      //this.someText = this.addClickableText(centerX, centerY, "Get random num from seed (output in console)", mainFontFamily, '16px', mainFontColor, this.getRandomNumberFromSeed ).on('pointerdown', () => this.getRandomNumberFromSeed() );
+    }
+
+    exitDeck() {
+      this.scene.start('fight', { objsOut: objs });
+    }
       
+    nextClick() {
+      console.log("x: " + x.length);
+      console.log("idx: " + idx);
+      if (idx >= x.length-1)
+        idx = -1;
+      idx++;
+      this.myImg.setActive(false).setVisible(false);
+      this.myText.setActive(false).setVisible(false);
+      this.myImg = this.add.image(centerX, centerY, x[idx].spriteImage);
+      this.myText = this.addClickableText(centerX, centerY+25, x[idx].ann, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
     }
 
-    startDeckScene() {
-      anotherFlag = true;
-      for (let i = 0; i <= 8; i++) {
-        cardArray[i].setActive(false).setVisible(false);
-        cardTextArray[i].setActive(false).setVisible(false);
-        manaTextArray[i].setActive(false).setVisible(false);
-      }
-
-      this.scene.start('deck', { objsPassed: objs });  
+    prevClick() {
+      if (idx <= 0)
+        idx = x.length;
+      idx--;
+      this.myImg.setActive(false).setVisible(false);
+      this.myText.setActive(false).setVisible(false);
+      this.myImg = this.add.image(centerX, centerY, x[idx].spriteImage);
+      this.myText = this.addClickableText(centerX, centerY+25, x[idx].ann, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
     }
 
-    loadCards() {
-      console.log("loading");
-      let baseX = 0;
-      cardArray = [];
-      cardTextArray = [];
-      manaTextArray = [];
-      for (let i = 0; i <= 8; i++) {
-
-
-        let node = this.addImage(width*(0.185)+baseX, height*(0.85), myCardArr[i].spriteImage, 0.75)
-          .on('pointerdown', () => this.clickCard(i, myCardArr[i]));
-        let nodeText = this.addClickableText(width*(0.185)+baseX, height*(0.85)+20, myCardArr[i].ann, mainFontFamily, '12px', mainFontColor).setOrigin(0.5, 0.5).on('pointerdown', () => this.clickCard(i, myCardArr[i]));
-        let manaText = this.addClickableText(width*(0.185)+baseX-26, height*(0.85)-43, myCardArr[i].cost, mainFontFamily, '10px', mainFontColor).setOrigin(0.5, 0.5);
-        cardArray.push(node);
-        cardTextArray.push(nodeText);
-        manaTextArray.push(manaText);
-        baseX = baseX + 85;
-      }
-    }
 
     makeCards() {
-      console.log("making");
       let baseX = 0;
-      myCardArr = [];
       for (let i = 0; i <= 8; i++) {
         let randomNum = this.getRoll() / 100;
         let card = deckObj.getRandomCard(randomNum);
 
-        myCardArr.push(card);
+
 
         let node = this.addImage(width*(0.185)+baseX, height*(0.85), card.spriteImage, 0.75)
           .on('pointerdown', () => this.clickCard(i, card));
@@ -206,7 +124,6 @@ export default class Fight extends Phaser.Scene {
       if (player.mana >= card.cost) {
         this.executeCard(card);
         this.endButton.setActive(true).setVisible(true);
-        this.deckIcon.setActive(false).setVisible(false);
         player.mana = player.mana - card.cost;
         cardArray[index].setActive(false).setVisible(false);
         cardTextArray[index].setActive(false).setVisible(false);
@@ -248,7 +165,6 @@ export default class Fight extends Phaser.Scene {
       turnCount++;
       this.makeCards();
       this.endButton.setActive(false).setVisible(false);
-      this.deckIcon.setActive(true).setVisible(true);
       
     }
 
@@ -297,18 +213,8 @@ export default class Fight extends Phaser.Scene {
     }
 
     update() {
-      if (someFlag == true) {
-        this.refreshStats();
-      }
-      this.calcHealth();
-      this.turnText.setText("Turn " + turnCount);
 
-
-      if (enemy.hp <= 0) {
-        player.stage++;
-        objs.setPlayer(player);
-        this.scene.start('level', { seedPassed: seed, seedSizePassed: seedSize, seedIndexPassed: seedIndex, objsPassed: objs});  
-      }
+      this.myText2.setText("Card: " + (idx+1) + "/" + x.length, 'MyCustomFont', '16px', '#ded9cc');
     }
 
     addImage(posX, posY, img, scale) {

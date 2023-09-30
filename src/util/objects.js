@@ -21,6 +21,14 @@ export default class Objects {
     return deckObject;
   }
 
+  setPlayer(input) {
+    playerObject = input;
+  }
+
+  setDeck(input) {
+    deckObject = input;
+  }
+
 }
 
 

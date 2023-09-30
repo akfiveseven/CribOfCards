@@ -5,7 +5,7 @@ import seedrandom from 'seedrandom';
 
 var objs = new Objects();
 
-var player;
+var player, deckObj;
 
 var width, height;
 
@@ -14,6 +14,9 @@ var centerX, centerY;
 var seed, seedSize, seedIndex;
 
 var objs;
+var points;
+
+var defaultStats = [];
 
 export default class Level extends Phaser.Scene {
   constructor() {
@@ -30,24 +33,67 @@ export default class Level extends Phaser.Scene {
       seedSize = data.seedSizePassed;
       seedIndex = data.seedIndexPassed;
       objs = data.objsPassed;
+      player = objs.getPlayer();
+      deckObj = objs.getDeck();
   }
 
   create () {
 
+      if (player.stage == 1) {
+        points = 10;
+        defaultStats.push(player.maxHP, player.maxMana, player.ap, player.ad, player.mp, player.md, player.crit);
 
-      this.levelText = this.add.text(centerX, centerY, "<GOTO FIGHT>", { fontFamily: 'MyCustomFont', fontSize: '48px', fill: '#ded9cc' })
-        .setOrigin(0.5, 0.5)
-        .setInteractive()
-        .on('pointerdown', () => this.startLevel());
 
-      this.add.text(centerX, centerY-100, "<GET RANDOM>", { fontFamily: 'MyCustomFont', fontSize: '48px', fill: '#ded9cc' })
-        .setOrigin(0.5, 0.5)
-        .setInteractive()
-        .on('pointerdown', () => this.getRoll());
+        this.add.image(width*(0.15), height*(0.5), 'character').setScale(5);
+        this.header = this.addClickableText(width*(0.6), height*(0.2), "Allocate " + points + " points" , '24px');
+        this.hpText = this.addClickableText(width*(0.3), height*(0.4), "MAX HP:              " + player.maxHP, '24px').setOrigin(0, 0);
+        this.manaText = this.addClickableText(width*(0.3), height*(0.45), "MAX MANA:            " + player.maxMana, '24px').setOrigin(0, 0);
+        this.apText = this.addClickableText(width*(0.3), height*(0.5), "ATTACK POWER:       " + player.ap, '24px').setOrigin(0, 0);
+        this.adText = this.addClickableText(width*(0.3), height*(0.55), "ATTACK DEFENSE:     " + player.ad, '24px').setOrigin(0, 0);
+        this.mpText = this.addClickableText(width*(0.3), height*(0.6), "MAGIC POWER:        " + player.mp, '24px').setOrigin(0, 0);
+        this.mdText = this.addClickableText(width*(0.3), height*(0.65), "MAGIC DEFENSE:      " + player.md, '24px').setOrigin(0, 0);
+        this.critText = this.addClickableText(width*(0.3), height*(0.7), "CRIT CHANCE:        " + player.crit, '24px').setOrigin(0, 0);
 
-      console.log("Seed passed is: " + seed);
-      console.log(seedSize);
-      console.log(seedIndex);
+        let baseY = 0.4;
+        for (let i = 0; i < 7; i++) {
+          this.addClickableText(width*(0.65), height*(baseY), "-", '24px')
+            .on('pointerdown', () => this.minus(i))
+            .setOrigin(0, 0);
+          this.addClickableText(width*(0.675), height*(baseY), "+", '24px')
+            .on('pointerdown', () => this.plus(i))
+            .setOrigin(0, 0);
+          baseY = baseY + 0.05;
+        }
+        this.addClickableText(width*(0.85), height*(0.85), "continue", '24px')
+          .on('pointerdown', () => this.startLevel());
+        //this.levelText = this.add.text(centerX, centerY, "<GOTO FIGHT>", { fontFamily: 'MyCustomFont', fontSize: '48px', fill: '#ded9cc' })
+          //.setOrigin(0.5, 0.5)
+          //.setInteractive()
+          //.on('pointerdown', () => this.startLevel());
+
+
+        console.log("Seed passed is: " + seed);
+        console.log(seedSize);
+        console.log(seedIndex);
+      }
+      else if (player.stage == 2) {
+        //this.levelText.setActive(false).setVisible(false);
+        this.addClickableText(centerX, height*(0.15), "You won! Pick a card.", '36px');
+        let baseX = width*(0.40);
+        for (let i = 0; i < 2; i++) {
+
+          let roll = this.getRoll();
+          let myCard = deckObj.getRestCard(this.getRoll());
+          this.add.image(baseX, centerY, myCard.spriteImage).on('pointerdown', () => this.addCard(myCard));
+          this.addClickableText(baseX, centerY+25, myCard.ann, '16px').on('pointerdown', () => this.addCard(myCard));
+          baseX = baseX + 150;
+        }
+      }
+      else {
+
+      }
+
+
 
 
 
@@ -69,10 +115,93 @@ export default class Level extends Phaser.Scene {
 
   }
 
+  addCard(card) {
+    deckObj.pushCardToDeck(card);
+    this.startLevel();
+  }
+
+  minus(idx) {
+    if (points < 10) {
+      if (idx == 0) {
+        if (defaultStats[0] == player.maxHP)
+          return;
+        player.maxHP--;
+        player.hp--;
+      }
+      else if (idx == 1) {
+        if (defaultStats[1] == player.maxMana)
+          return;
+        player.maxMana--;
+        player.mana--;
+      }
+      else if (idx == 2) {
+        if (defaultStats[2] == player.ap)
+          return;
+        player.ap--;
+      }
+      else if (idx == 3) {
+        if (defaultStats[3] == player.ad)
+          return;
+        player.ad--;
+      }
+      else if (idx == 4) {
+        if (defaultStats[4] == player.mp)
+          return;
+        player.mp--;
+      }
+      else if (idx == 5) {
+        if (defaultStats[5] == player.md)
+          return;
+        player.md--;
+      }
+      else if (idx == 6) {
+        if (defaultStats[6] == player.crit)
+          return;
+        player.crit = Number(player.crit - 0.01);
+      }
+      points++;
+    }
+  }
+
+  plus(idx) {
+    if (points > 0) {
+      points--;
+      if (idx == 0) {
+        player.maxHP++;
+        player.hp++;
+      }
+      else if (idx == 1) {
+        player.maxMana++;
+        player.mana++;
+      }
+      else if (idx == 2)
+        player.ap++;
+      else if (idx == 3)
+        player.ad++;
+      else if (idx == 4)
+        player.mp++;
+      else if (idx == 5)
+        player.md++;
+      else if (idx == 6)
+        player.crit = Number(player.crit + 0.01);
+
+    }
+  }
+
+  addClickableText(posX, posY, text, size) { // ONLY WORKS IF clickFunc has no parameters
+
+
+    let result = this.add.text(posX, posY, text, { fontFamily: 'MyCustomFont', fontSize: size, fill: '#ded9cc' })
+      .setInteractive()
+      .setOrigin(0.5, 0.5);
+
+    return result;
+
+  }
+
   startLevel() {
-
-    this.levelText.setActive(false).setVisible(false); 
-
+    objs.setPlayer(player);
+    objs.setDeck(deckObj);
     this.scene.start('fight', { seedOut: seed, seedSizeOut: seedSize, seedIndexOut: seedIndex, objsOut: objs });
 
   }
@@ -203,7 +332,17 @@ export default class Level extends Phaser.Scene {
   }
 
   update() {
+    if (player.stage == 1) {
 
+      this.header.setText("Allocate " + points + " points");
+      this.hpText.setText("MAX HP:             " + player.maxHP);
+      this.manaText.setText("MAX MANA:           " + player.maxMana);
+      this.apText.setText("ATTACK POWER:       " + player.ap);
+      this.adText.setText("ATTACK DEFENSE:     " + player.ad);
+      this.mpText.setText("MAGIC POWER:        " + player.mp, '24px');
+      this.mdText.setText("MAGIC DEFENSE:      " + player.md, '24px');
+      this.critText.setText("CRIT CHANCE:        " + Math.round(player.crit * 100) / 100, '24px');
+    }
   }
 
 

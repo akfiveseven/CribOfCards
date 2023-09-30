@@ -82,18 +82,20 @@ export default class cards {
         cardArray.push(pokeCard);
         cardArray.push(stabCard);
         cardArray.push(arcaneShotCard);
-        cardArray.push(arcanePulseCard);
-        cardArray.push(arcaneStrikeCard);
-        cardArray.push(arcaneBlastCard);
-        cardArray.push(arcaneExplosionCard);
-        cardArray.push(arcaneEruptionCard);
-        cardArray.push(bandageCard);
-        cardArray.push(meditateCard);
-        cardArray.push(medkitCard);
-        cardArray.push(channelCard);
-        cardArray.push(beerCard);
-        cardArray.push(studyCard);
-        cardArray.push(friskCard);
+        restCards.push(pokeCard);
+        restCards.push(stabCard);
+        restCards.push(arcaneShotCard);
+        restCards.push(arcaneStrikeCard);
+        restCards.push(arcaneBlastCard);
+        restCards.push(arcaneExplosionCard);
+        restCards.push(arcaneEruptionCard);
+        restCards.push(bandageCard);
+        restCards.push(meditateCard);
+        restCards.push(medkitCard);
+        restCards.push(channelCard);
+        restCards.push(beerCard);
+        restCards.push(studyCard);
+        restCards.push(friskCard);
         //for (let i = 0; i < 3; i++) {
             //this.pushACard();
         //}
@@ -142,6 +144,10 @@ export default class cards {
 		return x;
 	}
 
+    pushCardToDeck(card) {
+      cardArray.push(card);
+    }
+
     pushRandomCard() {
 	    let b = Math.floor(Math.random() * restCards.length);	
 	    cardArray.push(restCards[b]);
@@ -150,6 +156,11 @@ export default class cards {
     getRandomCard(randNum) {
       let a = Math.floor(randNum * cardArray.length);
       return cardArray[a];
+    }
+
+    getRestCard(randNum) {
+      let a = Math.floor((randNum / 100) * restCards.length);
+      return restCards[a];
     }
 
     initSlimeCards() {
