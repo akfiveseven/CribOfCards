@@ -5,6 +5,33 @@ import entity from "../util/entity.js"
 import seedrandom from 'seedrandom';
 
 
+var width, height;
+var centerX, centerY;
+var mainFontColor, bgColor;
+var mainFontFamily;
+
+var seed, seedSize, seedIndex = 0;
+
+var entityVar;
+
+var seed;
+
+var objs;
+
+var cardArray = [];
+var cardTextArray = [];
+var manaTextArray = [];
+
+var turnCount;
+var player, enemy;
+var deckObj;
+
+var statsObj = [];
+
+var someFlag = false;
+let x, idx;
+
+//const slime = new entity("Sticky Slime", 10, 10, 0, 0, 10, 10, 25, 0, 0, 'slime', 0, 0);
 
 
 export default class Deck extends Phaser.Scene {
@@ -13,16 +40,35 @@ export default class Deck extends Phaser.Scene {
 
         super({ key: 'deck' });
 
+        width = window.innerWidth;
+        height = window.innerHeight;
+        centerX = width/2;
+        centerY  = height/2;
+        mainFontColor = '#ded9cc';
+        bgColor = '#2e2e2e';
+        mainFontFamily = 'MyCustomFont';
+        turnCount = 1;
+        //this.initSeed();
     }
 
 
     init(data) {
-        //objs = data.objsPassed;
+        objs = data.objsPassed;
     }
 
 
 
     create() {
+      idx = 0;
+      x = objs;
+      x = x.getDeck().getCardArray();
+      this.myImg = this.add.image(centerX, centerY, x[idx].spriteImage);
+      this.myText = this.addClickableText(centerX, centerY+25, x[idx].ann, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.myText2 = this.addClickableText(centerX, centerY-100, "Card: " + (idx+1) + "/" + x.length, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.myText3 = this.addClickableText(centerX, centerY+100, x[idx].cap, 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5);
+      this.addClickableText(centerX+100, centerY+25, "NEXT", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.nextClick());
+      this.addClickableText(centerX-100, centerY+25, "PREV", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.prevClick());
+      this.addClickableText(centerX, centerY+200, "EXIT", 'MyCustomFont', '16px', '#ded9cc').setOrigin(0.5, 0.5).on('pointerdown', () => this.exitDeck());
 
 
       
@@ -171,7 +217,7 @@ export default class Deck extends Phaser.Scene {
 
     update() {
 
-      //this.myText2.setText("Card: " + (idx+1) + "/" + x.length, 'MyCustomFont', '16px', '#ded9cc');
+      this.myText2.setText("Card: " + (idx+1) + "/" + x.length, 'MyCustomFont', '16px', '#ded9cc');
     }
 
     addImage(posX, posY, img, scale) {
