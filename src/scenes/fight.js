@@ -22,17 +22,13 @@ var player, enemy, deck;
 var fightDeckFlag;
 
 
-
-
-
-
 export default class Fight extends Phaser.Scene {
 
     constructor() {
 
         super({ key: 'fight' });
 
-        /*
+        
         width = window.innerWidth;
         height = window.innerHeight;
 
@@ -44,12 +40,12 @@ export default class Fight extends Phaser.Scene {
         centerY = height/2;
 
         turnCount = 1;
-
+        fightDeckFlag = false;
 
 
         this.playerSprite;
         this.enemySprite;
-        */
+        
 
 
 
@@ -61,13 +57,21 @@ export default class Fight extends Phaser.Scene {
         seedIndex = data.seedIndexOut;
         objs = data.objsOut;
         player = objs.getPlayer();
+        enemy = objs.getEnemy();
+        deck = objs.getDeck();
     }
 
 
 
     create() {
-        this.addImage(window.innerWidth/2, window.innerHeight/2, 'character', 1)
-            .on('pointerdown', () => this.scene.start('deck') );
+        this.deckSprite = this.addImage(50, 50, 'deckIcon', 1)
+            .on('pointerdown', () => this.toggleFightScene());
+        this.playerSprite = this.addImage(50, height*(0.9), 'character', 1.5)
+            .on('pointerdown', () => this.doNothing());
+        
+        this.enemySprite = this.addImage(width*(0.85), height*(0.2), enemy.img, 2);
+
+        this.toggleFightScene();
     }
 
 
@@ -77,7 +81,9 @@ export default class Fight extends Phaser.Scene {
     }
 
     toggleFightScene() {
-
+        fightDeckFlag = !fightDeckFlag;
+        this.playerSprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.enemySprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
     }
 
 
