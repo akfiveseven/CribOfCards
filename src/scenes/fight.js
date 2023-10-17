@@ -94,7 +94,7 @@ export default class Fight extends Phaser.Scene {
         this.healthText = this.addText(width*(0.05), height*(0.7), player.hp).setActive(false).setVisible(false)
         this.eHPSprite = this.add.sprite(width*(0.85), height*(0.1), 'hpspritesheet', 10).setScale(3)
         let arr = ['heartIcon', 'manaIcon', 'apIcon', 'adIcon', 'mpIcon', 'mdIcon', 'critIcon', 'critEffect']
-        let textArr = [player.hp, player.mana, player.ap, player.ad, player.mp, player.md, player.crit, player.critID]
+        let textArr = [player.hp + "/" + player.maxHP, player.mana + "/" + player.maxMana, player.ap, player.ad, player.mp, player.md, Math.floor(player.crit*100) + "%", player.critID]
         let y = height*(0.4);
         for (let i = 0; i < arr.length; i++) {
           let imgObj = this.addImage(30, y, arr[i], 1);
