@@ -43,7 +43,7 @@ export default class Fight extends Phaser.Scene {
         centerY = height/2;
 
         turnCount = 1;
-        fightDeckFlag = false;
+        fightDeckFlag = true;
 
 
         this.playerSprite;
