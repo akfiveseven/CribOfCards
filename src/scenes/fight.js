@@ -79,12 +79,16 @@ export default class Fight extends Phaser.Scene {
         this.turnText = "";
         this.playerTurnOutputTextArray = [];
         this.enemyTurnOutputTextArray = [];
+        this.logForward;
+        this.logBackward;
+        this.turnCountText;
 
         // card deck area
         this.cardArray = [];
         // this.cardSprites, this.cardCostText, this.cardAnnText;
         this.cardHoverText;
         this.endTurnSprite;
+
 
 
 
@@ -155,6 +159,10 @@ export default class Fight extends Phaser.Scene {
         this.turnText = this.addText(width*(0.25), height*(0.1), "Turn: " + turnCount, mainFontFamily, '16px', mainFontColor);
         this.createEnemyOutput(); //log
         //this.createPlayerOutput();
+        this.logBackward = this.addImage(width*(0.2), height*(0.15), 'back', 0.3);
+        this.logForward = this.addImage(width*(0.45), height*(0.15), 'play', 0.3);
+
+        this.turnCountText = this.addText(width*(0.1), height*(0.15), "0/0", mainFontFamily, '16px', mainFontColor);
         
         // NEXT CREATE DECK AREA STUFF
         
