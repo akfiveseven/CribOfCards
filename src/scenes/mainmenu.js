@@ -79,7 +79,8 @@ export default class MainMenu extends Phaser.Scene
         inputField.node.style.outline = "none";
         inputField.node.style.width = "75%";
 
-        var submitButton = this.add.dom(centerX*(0.90), centerY*(1.3), 'button', '', 'play');
+        /*
+        var submitButton = this.add.dom(centerX, centerY*(1.3), 'button', '', '>');
 
         submitButton.node.setAttribute('type', 'submit');
         
@@ -99,11 +100,14 @@ export default class MainMenu extends Phaser.Scene
         //submitButton.node.addEventListener('click', function () { const inputValue = inputField.node.value; seed = inputValue; } );
       
       
+
         submitButton.node.addEventListener('click', this.initSeed );
+        */
 
 
         this.scaleRatio = window.devicePixelRatio / window.devicePixelRatio;
-        this.titleImg = this.add.image(centerX, height*(0.15), 'logo').setScale(this.scaleRatio, this.scaleRatio);
+        this.titleImg = this.add.image(centerX, height*(0.15), 'logo').setScale(this.scaleRatio, this.scaleRatio).setOrigin(0.5, 0.5);
+        this.playThing = this.add.image(centerX, height*(0.65), 'play').setScale(this.scaleRatio, this.scaleRatio).setOrigin(0.5, 0.5).setInteractive().on('pointerdown', () => this.initSeed());
         this.versionText = this.add.text(width*(0.85), height*(0.93), versionString, { fontFamily: 'MyCustomFont', fontSize: '3em', fill: '#ded9cc'});
 
 

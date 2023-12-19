@@ -65,7 +65,7 @@ export default class Level extends Phaser.Scene {
             .setOrigin(0, 0);
           baseY = baseY + 0.05;
         }
-        this.addClickableText(width*(0.85), height*(0.85), "continue", '24px')
+        this.addClickableText(width*(0.85), height*(0.85), "continue", '36px')
           .on('pointerdown', () => this.startLevel());
         //this.levelText = this.add.text(centerX, centerY, "<GOTO FIGHT>", { fontFamily: 'MyCustomFont', fontSize: '48px', fill: '#ded9cc' })
           //.setOrigin(0.5, 0.5)

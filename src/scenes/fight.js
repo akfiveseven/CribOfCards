@@ -142,33 +142,80 @@ export default class Fight extends Phaser.Scene {
         this.deckSprite = this.addImage(50, 50, 'deckIcon', 1)
             .on('pointerdown', () => this.toggleFightScene());
 
-        this.pSprite = this.addImage(width*(0.05), height*(0.9), 'character', 1.5)
+        this.pSprite = this.addImage(width*(0.05), height*(0.9), 'character', 2.5)
             .on('pointerdown', () => this.doNothing());
-        this.pHPSprite = this.add.sprite(width*(0.05), height*(0.8), 'hpspritesheet', 10).setScale(1)
+        this.pHPSprite = this.add.sprite(width*(0.05), height*(0.9)-(height*0.12), 'hpspritesheet', 10).setScale(2)
 
-        this.eSprite = this.addImage(width*(0.85), height*(0.40), enemy.img, 2);
-        this.eHPSprite = this.add.sprite(width*(0.85), height*(0.15), 'hpspritesheet', 10).setScale(3)
+        this.pNameText = this.addText(width*0.05-(width*0.038), height*0.4-(height*0.035), "PLAYER", mainFontFamily, '16px', mainFontColor);
+        this.pNameText.setOrigin(0, 0);
+
+        this.eNameText = this.addText(width*0.6-(width*0.0485), height*0.15-(height*0.035), "ENEMY", mainFontFamily, '16px', mainFontColor);
+        this.eNameText.setOrigin(0, 0);
+
+        this.eSprite = this.addImage(width*(0.85), height*(0.40), enemy.img, 3);
+        this.eHPSprite = this.add.sprite(width*(0.85), height*(0.40)-(height*0.25), 'hpspritesheet', 10).setScale(3)
+
+        this.eIntentsText = this.addText(width*(0.85), height*(0.4)-(height*0.33), "INTENTS: <Intents here>", mainFontFamily, '16px', mainFontColor).setOrigin(0.5, 0.5);
 
         this.createPlayerStatObjects();
         this.createEnemyStatObjects();
 
         this.pStatHoverText = this.addText(30, height*(0.35), "Hello", mainFontFamily, '12px', mainFontColor).setActive(false).setVisible(false);
 
-        this.eIntentsText = this.addText(width*(0.75), height*(0.05), "INTENTS: <Intents here>", mainFontFamily, '16px', mainFontColor);
 
         this.turnText = this.addText(width*(0.25), height*(0.1), "Turn: " + turnCount, mainFontFamily, '16px', mainFontColor);
         this.createEnemyOutput(); //log
         //this.createPlayerOutput();
-        this.logBackward = this.addImage(width*(0.2), height*(0.15), 'back', 0.3);
-        this.logForward = this.addImage(width*(0.45), height*(0.15), 'play', 0.3);
+        this.logBackward = this.addImage(width*(0.25)-(width*0.025), height*(0.15), 'back', 0.4);
+        this.logForward = this.addImage(width*(0.25)+(width*0.15), height*(0.15), 'play', 0.4);
+        //this.logForward.angle = 180;
 
-        this.turnCountText = this.addText(width*(0.1), height*(0.15), "0/0", mainFontFamily, '16px', mainFontColor);
+        this.turnCountText = this.addText(width*(0.25), height*(0.065), "LOG: 0/0", mainFontFamily, '16px', mainFontColor);
+
+        //this.endTurnText = this.addText(width*0.9, height*0.67, "END TURN", mainFontFamily, '16px', mainFontColor);
+        this.endTurnText = this.addText(width*0.915, height*0.95, "END TURN", mainFontFamily, '24px', mainFontColor);
         
         // NEXT CREATE DECK AREA STUFF
         
+        /*
+        let x = width*0.2
+        for (let i = 0; i < 5; i++) {
+            this.addImage(x, height*0.8, 'blank', 1.65)
+            x = x + 300;
+        }
+        */
+
+        /*
+        let x = width*0.15
+        for (let i = 0; i < 6; i++) {
+            this.addImage(x, height*0.8, 'blank', 1.65)
+            x = x + 275;
+        }
+        */
+
+        /*
+        let x = width*0.15
+        for (let i = 0; i < 7; i++) {
+            this.addImage(x, height*0.8, 'blank', 1.65)
+            x = x + 225;
+        }
+        */
+
+        /*
+        let x = width*0.15
+        for (let i = 0; i < 8; i++) {
+            this.addImage(x, height*0.8, 'blank', 1.65)
+            x = x + 210;
+        }
+        */
         
-
-
+        
+        let x = width*0.15
+        for (let i = 0; i < 9; i++) {
+            this.addImage(x, height*0.8, 'blank', 1.65)
+            x = x + 190;
+        }
+        
 
     }
 
@@ -194,11 +241,11 @@ export default class Fight extends Phaser.Scene {
 
 
     createEnemyStatObjects() {
-        let y = height * (0.2);
+        let y = height * (0.15);
 
         for (let i = 0; i < statIconSpriteKeys.length; i++) {
-            let imgObj = this.addImage(width*(0.65), y, statIconSpriteKeys[i], 1);
-            let txtObj = this.addText(width*(0.67), y-5, this.eStatValueArray[i], mainFontFamily, '16px', mainFontColor);
+            let imgObj = this.addImage(width*0.6-(width*0.043), y, statIconSpriteKeys[i], 1);
+            let txtObj = this.addText(width*0.6-(width*0.033), y-8, this.eStatValueArray[i], mainFontFamily, '16px', mainFontColor);
             this.eStatIconImgArray.push(imgObj);
             this.eStatValueTextArray.push(txtObj);
             y = y + 25;
@@ -209,8 +256,8 @@ export default class Fight extends Phaser.Scene {
         let y = height * (0.4);
 
         for (let i = 0; i < statIconSpriteKeys.length; i++) {
-            let imgObj = this.addImage(30, y, statIconSpriteKeys[i], 1);
-            let txtObj = this.addText(50, y-5, this.pStatValueArray[i], mainFontFamily, '16px', mainFontColor);
+            let imgObj = this.addImage(width*0.05-(width*0.033), y, statIconSpriteKeys[i], 1);
+            let txtObj = this.addText(50, y-8, this.pStatValueArray[i], mainFontFamily, '16px', mainFontColor);
             txtObj.on('pointerover', () => this.showHoverText(i, 0)).on('pointerout', () => this.pStatHoverText.setActive(false).setVisible(false));
             imgObj.on('pointerover', () => this.showHoverText(i, 1)).on('pointerout', () => this.pStatHoverText.setActive(false).setVisible(false));
             this.pStatIconImgArray.push(imgObj)
