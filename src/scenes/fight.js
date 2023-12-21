@@ -61,9 +61,9 @@ export default class Fight extends Phaser.Scene {
 
         this.playerSprite;
         this.playerHealthBar;
-        this.pStatIconImgArray = [];
-        this.pStatValueArray; 
-        this.pStatValueTextArray = [];
+        this.playerStatIconArray = [];
+        this.playerStatValueArray; 
+        this.playerStatValueTextArray = [];
         
         // enemy
         this.enemyNameText;
@@ -76,17 +76,6 @@ export default class Fight extends Phaser.Scene {
         this.eStatValueArray; 
         this.enemyStatTextArray = [];
 
-        // chat log | refreshs when first card is used on player turn
-        this.logTurnText = "";
-        this.playerTurnOutputTextArray = [];
-        this.enemyTurnOutputTextArray = [];
-        this.logForward;
-        this.logBackward;
-        this.logTurnCountText;
-        this.logList = [];
-        this.logIndex = 0;
-
-        this.endTurnText;
         this.playerNameText;
         this.enemyNameText;
 
@@ -105,6 +94,10 @@ export default class Fight extends Phaser.Scene {
         this.deckSceneBackward;
 
 
+        this.myLog;
+        this.logText;
+        this.logTurn;
+        this.logTurnMessage;
 
 
 
@@ -118,7 +111,7 @@ export default class Fight extends Phaser.Scene {
         player = objs.getPlayer();
         enemy = objs.getEnemy();
         deck = objs.getDeck();
-        this.pStatValueArray = [player.hp + "/" + player.maxHP, player.mana + "/" + player.maxMana, player.ap, player.ad, player.mp, player.md, Math.floor(player.crit*100) + "%", player.critID]
+        this.playerStatValueArray = [player.hp + "/" + player.maxHP, player.mana + "/" + player.maxMana, player.ap, player.ad, player.mp, player.md, Math.floor(player.crit*100) + "%", player.critID]
         this.eStatValueArray = [enemy.hp + "/" + enemy.maxHP, enemy.mana + "/" + enemy.maxMana, enemy.ap, enemy.ad, enemy.mp, enemy.md, Math.floor(enemy.crit*100) + "%", enemy.critID]
     }
 
@@ -126,6 +119,7 @@ export default class Fight extends Phaser.Scene {
 
     create() {
         this.fightScene();
+        this.createLog();
     }
 
 
@@ -134,13 +128,31 @@ export default class Fight extends Phaser.Scene {
         this.refreshStats();
     }
 
+    createLog() {
+        /*
+        this.myLog = new log();
+        this.logText = this.addText(centerX-(width*0.4), centerY-(height*0.45), "LOG: " + this.myLog.currentIndex + "/" + this.myLog.entryList.length, mainFontFamily, '16px', mainFontColor);
+        this.logTurn = this.addText(centerX-(width*0.4), centerY-(height*0.4), "", mainFontFamily, '16px', mainFontColor);
+        this.logTurnMessage = this.addText(centerX-(width*0.4), centerY-(height*0.35), "", mainFontFamily, '16px', mainFontColor);
+        //this.myLog.pushEntry(1, "[INPUT]\n[OUTPUT]")
+        //this.myLog.pushEntry(2, "[INdfgT]\n[OUTdfghT]")
+        //this.addText(centerX, centerY, this.myLog.getEntry(0).message, mainFontFamily, '16px', mainFontColor);
+        //this.addText(centerX, centerY-50, this.myLog.getEntry(1).message, mainFontFamily, '16px', mainFontColor);
+        */
+    }
+
+    endTurnHandler() {
+
+    }
+
 
     refreshStats() {
-        this.pStatValueArray = [player.hp + "/" + player.maxHP, player.mana + "/" + player.maxMana, player.ap, player.ad, player.mp, player.md, Math.floor(player.crit*100) + "%", player.critID]
-        this.logTurnCountText.setText("LOG: " + this.logIndex + "/" + this.logList.length);
+        this.logText.setText("LOG: " + this.myLog.currentIndex + "/" + this.myLog.entryList.length);
+        this.playerStatValueArray = [player.hp + "/" + player.maxHP, player.mana + "/" + player.maxMana, player.ap, player.ad, player.mp, player.md, Math.floor(player.crit*100) + "%", player.critID]
+        //this.logTurnCountText.setText("LOG: " + this.logIndex + "/" + this.logList.length);
         //this.eStatValueArray = [enemy.hp + "/" + enemy.maxHP, enemy.mana + "/" + enemy.maxMana, enemy.ap, enemy.ad, enemy.mp, enemy.md, Math.floor(enemy.crit*100) + "%", enemy.critID]
-        for (let i = 0; i < this.pStatValueArray.length; i++) {
-            this.pStatValueTextArray[i].setText(this.pStatValueArray[i]);
+        for (let i = 0; i < this.playerStatValueArray.length; i++) {
+            this.playerStatValueTextArray[i].setText(this.playerStatValueArray[i]);
             if (i == 6 || i == 7) {
                 //this.enemyStatIconArray[i].setActive(false).setVisible(false);
                 //this.enemyStatTextArray[i].setActive(false).setVisible(false);
@@ -160,7 +172,7 @@ export default class Fight extends Phaser.Scene {
         this.playerNameText = this.addText(width*0.05-(width*0.038), height*0.4-(height*0.035), "PLAYER", mainFontFamily, '16px', mainFontColor);
         this.playerNameText.setOrigin(0, 0);
         this.createPlayerStatObjects();
-        this.playerStatHoverText = this.addText(30, height*(0.35), "Hello", mainFontFamily, '12px', mainFontColor).setActive(false).setVisible(false);
+        this.playerStatHoverText = this.addText(width*0.05-(width*0.038), height*(0.4)-(height*0.05), "Hello", mainFontFamily, '12px', mainFontColor).setActive(false).setVisible(false).setOrigin(0, 0);
 
         this.enemyNameText = this.addText(width*0.6-(width*0.0485), height*0.15-(height*0.035), "ENEMY", mainFontFamily, '16px', mainFontColor);
         this.enemyNameText.setOrigin(0, 0);
@@ -174,18 +186,20 @@ export default class Fight extends Phaser.Scene {
             this.enemyStatIconArray[i].setActive(false).setVisible(false);
             this.enemyStatTextArray[i].setActive(false).setVisible(false);
         }
-        this.createEnemyOutput(); //log
+        //this.createEnemyOutput(); //log
         //this.createPlayerOutput();
 
+        /*
         this.logTurnText = this.addText(width*(0.25), height*(0.1), "Turn: " + turnCount, mainFontFamily, '16px', mainFontColor);
         this.logBackward = this.addImage(width*(0.25)-(width*0.025), height*(0.15), 'back', 0.4);
         this.logForward = this.addImage(width*(0.25)+(width*0.15), height*(0.15), 'play', 0.4);
         this.logTurnCountText = this.addText(width*(0.25), height*(0.065), "LOG: " + this.logIndex + "/" + this.logList.length, mainFontFamily, '16px', mainFontColor);
         //this.logBackward.setActive(false).setVisible(false)
         //this.logForward.setActive(false).setVisible(false)
+        */
         //this.logForward.angle = 180;
 
-        this.endTurnText = this.addText(width*0.915, height*0.95, "END TURN", mainFontFamily, '24px', mainFontColor).on('pointerdown', () => this.pushToLog());
+        this.endTurnText = this.addText(width*0.915, height*0.95, "END TURN", mainFontFamily, '24px', mainFontColor).on('pointerdown', () => this.endTurnHandler());
         this.deckIcon = this.addImage(50, 50, 'deckIcon', 1).on('pointerdown', () => this.toggleFightScene());
         //this.endTurnText = this.addText(width*0.9, height*0.67, "END TURN", mainFontFamily, '16px', mainFontColor);
         
@@ -237,30 +251,8 @@ export default class Fight extends Phaser.Scene {
 
     }
 
-    pushToLog() {
-        this.logIndex++;
-        this.logList.push(`TEST ${this.logIndex}`);
-    }
 
-    createPlayerOutput() {
-        let thing = ["[PLAYER]", "Used [card] -> [output effect]"];
-        let y = height*(0.15);
-        for (let i = 0; i < thing.length; i++) {
-            let objThing = this.addText(width*(0.25), y, thing[i], mainFontFamily, '16px', mainFontColor);
-            this.playerTurnOutputTextArray.push(objThing);
-            y = y + 19;
-        }
-    }
 
-    createEnemyOutput() {
-        let thing = ["[ENEMY]", "Used [card] -> [output effect]"];
-        let y = height*(0.15);
-        for (let i = 0; i < thing.length; i++) {
-            let objThing = this.addText(width*(0.25), y, thing[i], mainFontFamily, '16px', mainFontColor);
-            this.enemyTurnOutputTextArray.push(objThing);
-            y = y + 19;
-        }
-    }
 
 
     createEnemyStatObjects() {
@@ -280,11 +272,11 @@ export default class Fight extends Phaser.Scene {
 
         for (let i = 0; i < statIconSpriteKeys.length; i++) {
             let imgObj = this.addImage(width*0.05-(width*0.033), y, statIconSpriteKeys[i], 1);
-            let txtObj = this.addText(50, y-8, this.pStatValueArray[i], mainFontFamily, '16px', mainFontColor);
+            let txtObj = this.addText(50, y-8, this.playerStatValueArray[i], mainFontFamily, '16px', mainFontColor);
             txtObj.on('pointerover', () => this.showHoverText(i, 0)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
             imgObj.on('pointerover', () => this.showHoverText(i, 1)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
-            this.pStatIconImgArray.push(imgObj)
-            this.pStatValueTextArray.push(txtObj)
+            this.playerStatIconArray.push(imgObj)
+            this.playerStatValueTextArray.push(txtObj)
             y = y + 25;
         }
 
@@ -292,63 +284,31 @@ export default class Fight extends Phaser.Scene {
     }
 
     showHoverText(idx, flag) {
-        if (flag == 0) {
-            switch(idx) {
-                case 0:
-                    this.playerStatHoverText.setText("0")
-                    break;
-                case 1:
-                    this.playerStatHoverText.setText("1")
-                    break;
-                case 2:
-                    this.playerStatHoverText.setText("2")
-                    break;
-                case 3:
-                    this.playerStatHoverText.setText("3")
-                    break;
-                case 4:
-                    this.playerStatHoverText.setText("4")
-                    break;
-                case 5:
-                    this.playerStatHoverText.setText("5")
-                    break;
-                case 6:
-                    this.playerStatHoverText.setText("6")
-                    break;
-                case 7:
-                    this.playerStatHoverText.setText("7")
-                    break;
-            }
-        }
-        else if (flag == 1) {
-            switch(idx) {
-                case 0:
-                    this.playerStatHoverText.setText("a")
-                    break;
-                case 1:
-                    this.playerStatHoverText.setText("b")
-                    break;
-                case 2:
-                    this.playerStatHoverText.setText("c")
-                    break;
-                case 3:
-                    this.playerStatHoverText.setText("d")
-                    break;
-                case 4:
-                    this.playerStatHoverText.setText("e")
-                    break;
-                case 5:
-                    this.playerStatHoverText.setText("f")
-                    break;
-                case 6:
-                    this.playerStatHoverText.setText("g")
-                    break;
-                case 7:
-                    this.playerStatHoverText.setText("h")
-                    break;
-            }
-
-
+        switch (idx) {
+            case 0:
+                this.playerStatHoverText.setText("Health Points (HP)")
+                break;
+            case 1:
+                this.playerStatHoverText.setText("Mana")
+                break;
+            case 2:
+                this.playerStatHoverText.setText("Attack Power (AP)")
+                break;
+            case 3:
+                this.playerStatHoverText.setText("Attack Defense (AD)")
+                break;
+            case 4:
+                this.playerStatHoverText.setText("Magic Power (MP)")
+                break;
+            case 5:
+                this.playerStatHoverText.setText("Magic Defense (MD)")
+                break;
+            case 6:
+                this.playerStatHoverText.setText("Critical Chance")
+                break;
+            case 7:
+                this.playerStatHoverText.setText("Critical Effect")
+                break;
         }
 
         this.playerStatHoverText.setActive(true).setVisible(true);
@@ -367,7 +327,7 @@ export default class Fight extends Phaser.Scene {
     toggleFightScene() {
         fightDeckFlag = !fightDeckFlag;
         this.enemyIntentsText.setActive(false).setVisible(false);
-        this.logTurnText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        //this.logTurnText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
         //this.createEnemyOutput();
         //this.playerTurnOutputTextArray.push(objThing);
 
@@ -378,19 +338,21 @@ export default class Fight extends Phaser.Scene {
         this.enemyNameText.setActive(false).setVisible(false);
         this.playerNameText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
         this.endTurnText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.logForward.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.logBackward.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.logTurnCountText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        for (let i = 0; i < this.pStatValueTextArray.length; i++) {
-          this.pStatIconImgArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
-          this.pStatValueTextArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        //this.logForward.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        //this.logBackward.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        //this.logTurnCountText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        for (let i = 0; i < this.playerStatValueTextArray.length; i++) {
+          this.playerStatIconArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
+          this.playerStatValueTextArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
           this.enemyStatIconArray[i].setActive(false).setVisible(false);
           this.enemyStatTextArray[i].setActive(false).setVisible(false);
         }
 
+        /*
         for (let i = 0; i < this.enemyTurnOutputTextArray.length; i++) {
             this.enemyTurnOutputTextArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
         }
+        */
 
         this.createDeckScene();
 
