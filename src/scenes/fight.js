@@ -147,7 +147,7 @@ export default class Fight extends Phaser.Scene {
 
 
     refreshStats() {
-        this.logText.setText("LOG: " + this.myLog.currentIndex + "/" + this.myLog.entryList.length);
+        //this.logText.setText("LOG: " + this.myLog.currentIndex + "/" + this.myLog.entryList.length);
         this.playerStatValueArray = [player.hp + "/" + player.maxHP, player.mana + "/" + player.maxMana, player.ap, player.ad, player.mp, player.md, Math.floor(player.crit*100) + "%", player.critID]
         //this.logTurnCountText.setText("LOG: " + this.logIndex + "/" + this.logList.length);
         //this.eStatValueArray = [enemy.hp + "/" + enemy.maxHP, enemy.mana + "/" + enemy.maxMana, enemy.ap, enemy.ad, enemy.mp, enemy.md, Math.floor(enemy.crit*100) + "%", enemy.critID]
@@ -165,7 +165,7 @@ export default class Fight extends Phaser.Scene {
 
   
     fightScene() {
-        this.deckSceneCardIcon = this.addImage(centerX, centerY, 'blank', 1).setActive(false).setVisible(false);
+        this.deckSceneCardIcon = this.addImage(centerX, centerY, 'blank', 3).setActive(false).setVisible(false);
 
         this.playerSprite = this.addImage(width*(0.05), height*(0.9), 'character', 2.5).on('pointerdown', () => this.doNothing());
         this.playerHealthBar = this.add.sprite(width*(0.05), height*(0.9)-(height*0.12), 'hpspritesheet', 10).setScale(2)

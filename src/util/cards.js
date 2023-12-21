@@ -79,6 +79,8 @@ export default class cards {
 
 
     initPlayerCards() {
+        cardArray.push(arcaneShotCard);
+        /*
         cardArray.push(pokeCard);
         cardArray.push(stabCard);
         cardArray.push(arcaneShotCard);
@@ -99,6 +101,7 @@ export default class cards {
         //for (let i = 0; i < 3; i++) {
             //this.pushACard();
         //}
+        */
     }
 
     pushACard() {
