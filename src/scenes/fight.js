@@ -1,6 +1,7 @@
 //fight.js
 import Phaser, { Scene } from "phaser";
 import entity from "../util/entity.js"
+import log from "../util/log.js";
 import seedrandom from 'seedrandom';
 
 var width, height;
@@ -49,43 +50,45 @@ export default class Fight extends Phaser.Scene {
 
         // [OBJECT INIT]
 
-        this.deckSprite; // deck sprite object
+        this.deckIcon; // deck sprite object
 
         // player
-        this.pNameText;
-        this.pStatHoverText;
+        this.playerNameText;
+        this.playerStatHoverText;
         this.pHPBarHoverText;
         this.pStatIconHoverText;
         this.pStatValueHoverText;
 
-        this.pSprite;
-        this.pHPSprite;
+        this.playerSprite;
+        this.playerHealthBar;
         this.pStatIconImgArray = [];
         this.pStatValueArray; 
         this.pStatValueTextArray = [];
         
         // enemy
-        this.eNameText;
+        this.enemyNameText;
         this.eStatIconHoverText;
-        this.eIntentsText;
+        this.enemyIntentsText;
 
-        this.eSprite;
-        this.eHPSprite;
-        this.eStatIconImgArray = [];
+        this.enemySprite;
+        this.enemyHealthBar;
+        this.enemyStatIconArray = [];
         this.eStatValueArray; 
-        this.eStatValueTextArray = [];
+        this.enemyStatTextArray = [];
 
         // chat log | refreshs when first card is used on player turn
-        this.turnText = "";
+        this.logTurnText = "";
         this.playerTurnOutputTextArray = [];
         this.enemyTurnOutputTextArray = [];
         this.logForward;
         this.logBackward;
-        this.turnCountText;
+        this.logTurnCountText;
+        this.logList = [];
+        this.logIndex = 0;
 
         this.endTurnText;
-        this.pNameText;
-        this.eNameText;
+        this.playerNameText;
+        this.enemyNameText;
 
         // card deck area
         this.cardArray = [];
@@ -95,7 +98,11 @@ export default class Fight extends Phaser.Scene {
 
 
 
-
+        this.deckSceneCardIcon;
+        this.deckSceneCardNameText;
+        this.deckSceneCardDescText;
+        this.deckSceneForward;
+        this.deckSceneBackward;
 
 
 
@@ -130,60 +137,57 @@ export default class Fight extends Phaser.Scene {
 
     refreshStats() {
         this.pStatValueArray = [player.hp + "/" + player.maxHP, player.mana + "/" + player.maxMana, player.ap, player.ad, player.mp, player.md, Math.floor(player.crit*100) + "%", player.critID]
+        this.logTurnCountText.setText("LOG: " + this.logIndex + "/" + this.logList.length);
         //this.eStatValueArray = [enemy.hp + "/" + enemy.maxHP, enemy.mana + "/" + enemy.maxMana, enemy.ap, enemy.ad, enemy.mp, enemy.md, Math.floor(enemy.crit*100) + "%", enemy.critID]
         for (let i = 0; i < this.pStatValueArray.length; i++) {
             this.pStatValueTextArray[i].setText(this.pStatValueArray[i]);
             if (i == 6 || i == 7) {
-                //this.eStatIconImgArray[i].setActive(false).setVisible(false);
-                //this.eStatValueTextArray[i].setActive(false).setVisible(false);
+                //this.enemyStatIconArray[i].setActive(false).setVisible(false);
+                //this.enemyStatTextArray[i].setActive(false).setVisible(false);
             }
             else {
-                //this.eStatValueTextArray[i].setText(this.eStatValueArray[i]);
+                //this.enemyStatTextArray[i].setText(this.eStatValueArray[i]);
             }
         }
     }
 
   
     fightScene() {
-        this.deckSprite = this.addImage(50, 50, 'deckIcon', 1)
-            .on('pointerdown', () => this.toggleFightScene());
+        this.deckSceneCardIcon = this.addImage(centerX, centerY, 'blank', 1).setActive(false).setVisible(false);
 
-        this.pSprite = this.addImage(width*(0.05), height*(0.9), 'character', 2.5)
-            .on('pointerdown', () => this.doNothing());
-        this.pHPSprite = this.add.sprite(width*(0.05), height*(0.9)-(height*0.12), 'hpspritesheet', 10).setScale(2)
-
-        this.pNameText = this.addText(width*0.05-(width*0.038), height*0.4-(height*0.035), "PLAYER", mainFontFamily, '16px', mainFontColor);
-        this.pNameText.setOrigin(0, 0);
-
-        this.eNameText = this.addText(width*0.6-(width*0.0485), height*0.15-(height*0.035), "ENEMY", mainFontFamily, '16px', mainFontColor);
-        this.eNameText.setOrigin(0, 0);
-        this.eNameText.setActive(false).setVisible(false);
-
-        this.eSprite = this.addImage(width*(0.85), height*(0.40), enemy.img, 3);
-        this.eHPSprite = this.add.sprite(width*(0.85), height*(0.40)-(height*0.25), 'hpspritesheet', 10).setScale(3)
-
-        this.eIntentsText = this.addText(width*(0.85), height*(0.4)-(height*0.33), "INTENTS: <Intents here>", mainFontFamily, '16px', mainFontColor).setOrigin(0.5, 0.5);
-        this.eIntentsText.setActive(false).setVisible(false);
-
+        this.playerSprite = this.addImage(width*(0.05), height*(0.9), 'character', 2.5).on('pointerdown', () => this.doNothing());
+        this.playerHealthBar = this.add.sprite(width*(0.05), height*(0.9)-(height*0.12), 'hpspritesheet', 10).setScale(2)
+        this.playerNameText = this.addText(width*0.05-(width*0.038), height*0.4-(height*0.035), "PLAYER", mainFontFamily, '16px', mainFontColor);
+        this.playerNameText.setOrigin(0, 0);
         this.createPlayerStatObjects();
+        this.playerStatHoverText = this.addText(30, height*(0.35), "Hello", mainFontFamily, '12px', mainFontColor).setActive(false).setVisible(false);
+
+        this.enemyNameText = this.addText(width*0.6-(width*0.0485), height*0.15-(height*0.035), "ENEMY", mainFontFamily, '16px', mainFontColor);
+        this.enemyNameText.setOrigin(0, 0);
+        this.enemyNameText.setActive(false).setVisible(false);
+        this.enemySprite = this.addImage(width*(0.85), height*(0.40), enemy.img, 3);
+        this.enemyHealthBar = this.add.sprite(width*(0.85), height*(0.40)-(height*0.25), 'hpspritesheet', 10).setScale(3)
+        this.enemyIntentsText = this.addText(width*(0.85), height*(0.4)-(height*0.33), "INTENTS: <Intents here>", mainFontFamily, '16px', mainFontColor).setOrigin(0.5, 0.5);
+        this.enemyIntentsText.setActive(false).setVisible(false);
         this.createEnemyStatObjects();
-
-        this.pStatHoverText = this.addText(30, height*(0.35), "Hello", mainFontFamily, '12px', mainFontColor).setActive(false).setVisible(false);
-
-
-        this.turnText = this.addText(width*(0.25), height*(0.1), "Turn: " + turnCount, mainFontFamily, '16px', mainFontColor);
+        for (let i = 0; i < this.enemyStatIconArray.length; i++) {
+            this.enemyStatIconArray[i].setActive(false).setVisible(false);
+            this.enemyStatTextArray[i].setActive(false).setVisible(false);
+        }
         this.createEnemyOutput(); //log
         //this.createPlayerOutput();
+
+        this.logTurnText = this.addText(width*(0.25), height*(0.1), "Turn: " + turnCount, mainFontFamily, '16px', mainFontColor);
         this.logBackward = this.addImage(width*(0.25)-(width*0.025), height*(0.15), 'back', 0.4);
         this.logForward = this.addImage(width*(0.25)+(width*0.15), height*(0.15), 'play', 0.4);
+        this.logTurnCountText = this.addText(width*(0.25), height*(0.065), "LOG: " + this.logIndex + "/" + this.logList.length, mainFontFamily, '16px', mainFontColor);
         //this.logBackward.setActive(false).setVisible(false)
         //this.logForward.setActive(false).setVisible(false)
         //this.logForward.angle = 180;
 
-        this.turnCountText = this.addText(width*(0.25), height*(0.065), "LOG: 0/0", mainFontFamily, '16px', mainFontColor);
-
+        this.endTurnText = this.addText(width*0.915, height*0.95, "END TURN", mainFontFamily, '24px', mainFontColor).on('pointerdown', () => this.pushToLog());
+        this.deckIcon = this.addImage(50, 50, 'deckIcon', 1).on('pointerdown', () => this.toggleFightScene());
         //this.endTurnText = this.addText(width*0.9, height*0.67, "END TURN", mainFontFamily, '16px', mainFontColor);
-        this.endTurnText = this.addText(width*0.915, height*0.95, "END TURN", mainFontFamily, '24px', mainFontColor);
         
         // NEXT CREATE DECK AREA STUFF
         
@@ -233,6 +237,11 @@ export default class Fight extends Phaser.Scene {
 
     }
 
+    pushToLog() {
+        this.logIndex++;
+        this.logList.push(`TEST ${this.logIndex}`);
+    }
+
     createPlayerOutput() {
         let thing = ["[PLAYER]", "Used [card] -> [output effect]"];
         let y = height*(0.15);
@@ -260,8 +269,8 @@ export default class Fight extends Phaser.Scene {
         for (let i = 0; i < statIconSpriteKeys.length; i++) {
             let imgObj = this.addImage(width*0.6-(width*0.043), y, statIconSpriteKeys[i], 1);
             let txtObj = this.addText(width*0.6-(width*0.033), y-8, this.eStatValueArray[i], mainFontFamily, '16px', mainFontColor);
-            this.eStatIconImgArray.push(imgObj);
-            this.eStatValueTextArray.push(txtObj);
+            this.enemyStatIconArray.push(imgObj);
+            this.enemyStatTextArray.push(txtObj);
             y = y + 25;
         }
     }
@@ -272,8 +281,8 @@ export default class Fight extends Phaser.Scene {
         for (let i = 0; i < statIconSpriteKeys.length; i++) {
             let imgObj = this.addImage(width*0.05-(width*0.033), y, statIconSpriteKeys[i], 1);
             let txtObj = this.addText(50, y-8, this.pStatValueArray[i], mainFontFamily, '16px', mainFontColor);
-            txtObj.on('pointerover', () => this.showHoverText(i, 0)).on('pointerout', () => this.pStatHoverText.setActive(false).setVisible(false));
-            imgObj.on('pointerover', () => this.showHoverText(i, 1)).on('pointerout', () => this.pStatHoverText.setActive(false).setVisible(false));
+            txtObj.on('pointerover', () => this.showHoverText(i, 0)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
+            imgObj.on('pointerover', () => this.showHoverText(i, 1)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
             this.pStatIconImgArray.push(imgObj)
             this.pStatValueTextArray.push(txtObj)
             y = y + 25;
@@ -286,63 +295,63 @@ export default class Fight extends Phaser.Scene {
         if (flag == 0) {
             switch(idx) {
                 case 0:
-                    this.pStatHoverText.setText("0")
+                    this.playerStatHoverText.setText("0")
                     break;
                 case 1:
-                    this.pStatHoverText.setText("1")
+                    this.playerStatHoverText.setText("1")
                     break;
                 case 2:
-                    this.pStatHoverText.setText("2")
+                    this.playerStatHoverText.setText("2")
                     break;
                 case 3:
-                    this.pStatHoverText.setText("3")
+                    this.playerStatHoverText.setText("3")
                     break;
                 case 4:
-                    this.pStatHoverText.setText("4")
+                    this.playerStatHoverText.setText("4")
                     break;
                 case 5:
-                    this.pStatHoverText.setText("5")
+                    this.playerStatHoverText.setText("5")
                     break;
                 case 6:
-                    this.pStatHoverText.setText("6")
+                    this.playerStatHoverText.setText("6")
                     break;
                 case 7:
-                    this.pStatHoverText.setText("7")
+                    this.playerStatHoverText.setText("7")
                     break;
             }
         }
         else if (flag == 1) {
             switch(idx) {
                 case 0:
-                    this.pStatHoverText.setText("a")
+                    this.playerStatHoverText.setText("a")
                     break;
                 case 1:
-                    this.pStatHoverText.setText("b")
+                    this.playerStatHoverText.setText("b")
                     break;
                 case 2:
-                    this.pStatHoverText.setText("c")
+                    this.playerStatHoverText.setText("c")
                     break;
                 case 3:
-                    this.pStatHoverText.setText("d")
+                    this.playerStatHoverText.setText("d")
                     break;
                 case 4:
-                    this.pStatHoverText.setText("e")
+                    this.playerStatHoverText.setText("e")
                     break;
                 case 5:
-                    this.pStatHoverText.setText("f")
+                    this.playerStatHoverText.setText("f")
                     break;
                 case 6:
-                    this.pStatHoverText.setText("g")
+                    this.playerStatHoverText.setText("g")
                     break;
                 case 7:
-                    this.pStatHoverText.setText("h")
+                    this.playerStatHoverText.setText("h")
                     break;
             }
 
 
         }
 
-        this.pStatHoverText.setActive(true).setVisible(true);
+        this.playerStatHoverText.setActive(true).setVisible(true);
     }
 
 
@@ -357,32 +366,38 @@ export default class Fight extends Phaser.Scene {
 
     toggleFightScene() {
         fightDeckFlag = !fightDeckFlag;
-        this.eIntentsText.setActive(false).setVisible(false);
-        this.turnText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.enemyIntentsText.setActive(false).setVisible(false);
+        this.logTurnText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
         //this.createEnemyOutput();
         //this.playerTurnOutputTextArray.push(objThing);
 
-        this.pSprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.eSprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.pHPSprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.eHPSprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.eNameText.setActive(false).setVisible(false);
-        this.pNameText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.playerSprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.enemySprite.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.playerHealthBar.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.enemyHealthBar.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.enemyNameText.setActive(false).setVisible(false);
+        this.playerNameText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
         this.endTurnText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
         this.logForward.setActive(fightDeckFlag).setVisible(fightDeckFlag);
         this.logBackward.setActive(fightDeckFlag).setVisible(fightDeckFlag);
-        this.turnCountText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
+        this.logTurnCountText.setActive(fightDeckFlag).setVisible(fightDeckFlag);
         for (let i = 0; i < this.pStatValueTextArray.length; i++) {
           this.pStatIconImgArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
           this.pStatValueTextArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
-          this.eStatIconImgArray[i].setActive(false).setVisible(false);
-          this.eStatValueTextArray[i].setActive(false).setVisible(false);
+          this.enemyStatIconArray[i].setActive(false).setVisible(false);
+          this.enemyStatTextArray[i].setActive(false).setVisible(false);
         }
 
         for (let i = 0; i < this.enemyTurnOutputTextArray.length; i++) {
             this.enemyTurnOutputTextArray[i].setActive(fightDeckFlag).setVisible(fightDeckFlag);
         }
 
+        this.createDeckScene();
+
+    }
+
+    createDeckScene() {
+        this.deckSceneCardIcon.setActive(!fightDeckFlag).setVisible(!fightDeckFlag);
     }
 
 
@@ -508,9 +523,9 @@ export default class Fight extends Phaser.Scene {
 
     //=================================================  ===================================================    
 
-        doNothing() {
-            // This function is used as a placeholder function
-        }
+    doNothing() {
+        // This function is used as a placeholder function
+    }
 
 
 
