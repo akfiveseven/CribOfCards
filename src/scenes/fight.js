@@ -167,11 +167,23 @@ export default class Fight extends Phaser.Scene {
     fightScene() {
         this.deckSceneCardIcon = this.addImage(centerX, centerY, 'blank', 3).setActive(false).setVisible(false);
 
-        this.playerSprite = this.addImage(width*(0.05), height*(0.9), 'character', 2.5).on('pointerdown', () => this.doNothing());
-        this.playerHealthBar = this.add.sprite(width*(0.05), height*(0.9)-(height*0.12), 'hpspritesheet', 10).setScale(2)
+        this.playerSprite = this.addImage(width*(0.075), height*(0.87), 'character', 2.5).on('pointerdown', () => this.doNothing());
+        this.playerHealthBar = this.add.sprite(width*(0.075), height*(0.70), 'hpspritesheet', 10).setScale(2)
         this.playerNameText = this.addText(width*0.05-(width*0.038), height*0.4-(height*0.035), "PLAYER", mainFontFamily, '16px', mainFontColor);
         this.playerNameText.setOrigin(0, 0);
-        this.createPlayerStatObjects();
+        //this.createPlayerStatObjects();
+
+        let y = height * (0.4);
+        for (let i = 0; i < statIconSpriteKeys.length; i++) {
+            let imgObj = this.addImage(width*(1/40), y, statIconSpriteKeys[i], 1);
+            let txtObj = this.addText(width*(1/26), y-8, this.playerStatValueArray[i], mainFontFamily, '16px', mainFontColor);
+            txtObj.on('pointerover', () => this.showHoverText(i, 0)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
+            imgObj.on('pointerover', () => this.showHoverText(i, 1)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
+            this.playerStatIconArray.push(imgObj)
+            this.playerStatValueTextArray.push(txtObj)
+            y = y + 25;
+        }
+
         this.playerStatHoverText = this.addText(width*0.05-(width*0.038), height*(0.4)-(height*0.05), "Hello", mainFontFamily, '12px', mainFontColor).setActive(false).setVisible(false).setOrigin(0, 0);
 
         this.enemyNameText = this.addText(width*0.6-(width*0.0485), height*0.15-(height*0.035), "ENEMY", mainFontFamily, '16px', mainFontColor);
@@ -181,7 +193,7 @@ export default class Fight extends Phaser.Scene {
         this.enemyHealthBar = this.add.sprite(width*(0.85), height*(0.40)-(height*0.25), 'hpspritesheet', 10).setScale(3)
         this.enemyIntentsText = this.addText(width*(0.85), height*(0.4)-(height*0.33), "INTENTS: <Intents here>", mainFontFamily, '16px', mainFontColor).setOrigin(0.5, 0.5);
         this.enemyIntentsText.setActive(false).setVisible(false);
-        this.createEnemyStatObjects();
+        //this.createEnemyStatObjects();
         for (let i = 0; i < this.enemyStatIconArray.length; i++) {
             this.enemyStatIconArray[i].setActive(false).setVisible(false);
             this.enemyStatTextArray[i].setActive(false).setVisible(false);
@@ -269,7 +281,6 @@ export default class Fight extends Phaser.Scene {
 
     createPlayerStatObjects() {
         let y = height * (0.4);
-
         for (let i = 0; i < statIconSpriteKeys.length; i++) {
             let imgObj = this.addImage(width*(1/40), y, statIconSpriteKeys[i], 1);
             let txtObj = this.addText(width*(1/26), y-8, this.playerStatValueArray[i], mainFontFamily, '16px', mainFontColor);
