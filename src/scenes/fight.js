@@ -271,8 +271,8 @@ export default class Fight extends Phaser.Scene {
         let y = height * (0.4);
 
         for (let i = 0; i < statIconSpriteKeys.length; i++) {
-            let imgObj = this.addImage(width*0.05-(width*0.033), y, statIconSpriteKeys[i], 1);
-            let txtObj = this.addText(50, y-8, this.playerStatValueArray[i], mainFontFamily, '16px', mainFontColor);
+            let imgObj = this.addImage(width*(1/40), y, statIconSpriteKeys[i], 1);
+            let txtObj = this.addText(width*(1/26), y-8, this.playerStatValueArray[i], mainFontFamily, '16px', mainFontColor);
             txtObj.on('pointerover', () => this.showHoverText(i, 0)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
             imgObj.on('pointerover', () => this.showHoverText(i, 1)).on('pointerout', () => this.playerStatHoverText.setActive(false).setVisible(false));
             this.playerStatIconArray.push(imgObj)
